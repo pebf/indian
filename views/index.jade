@@ -1,0 +1,120 @@
+html
+  head
+    meta(http-equiv='Content-Type', content='text/html; charset=utf-8')
+    title Indian Holdem
+    link(href='http://fonts.googleapis.com/css?family=Eater', rel='stylesheet', type='text/css')
+    link(rel='stylesheet', type='text/css', href='./style/index.css')
+  body
+    .header._header
+      .logo.eater_font Indian Holdem
+    .game._game
+      .game_ct._game_ct
+        .user_area
+          .hand._user_hand
+            .card_wrap._card_wrap
+              .card.back
+                .card_inner
+          .player_info._player_info
+            .player_box._player_box
+              .player_box_header._player_box_header
+                span.player_name._player_name #{user.sName}
+                | 님
+              .player_box_body._player_box_body
+                table
+                  colgroup
+                    col(width='60')
+                    col(width='60')
+                  tbody
+                    tr
+                      td 전적
+                      td
+                        span.num 0
+                        | 승
+                        span.num 0
+                        | 패
+                    tr
+                      td 가넷
+                      td
+                        span.num {user.nGold}
+            input.ready_btn._ready_btn.eater_font(type='button', value='READY')
+        .board._board
+          .top_area._top_area
+            .place_wrap.share
+              .place._share
+                .card_wrap._card_wrap
+              .place_name.eater_font SHARE
+          .btm_area._btm_area
+            .place_wrap.deck
+              .place._deck
+                .card_wrap._card_wrap
+                  .card.back
+                    .card_inner
+              .place_name.eater_font DECK
+        .opponent_area
+          .hand._opponent_hand
+            .card_wrap._card_wrap
+              .card
+                .card_inner
+                  span 7
+          .player_info._player_info
+            .player_box._player_box
+              .player_box_header._player_box_header
+                span.player_name._player_name 상대방 이름
+                | 님
+              .player_box_body._player_box_body
+                table
+                  colgroup
+                    col(width='60')
+                    col(width='60')
+                  tbody
+                    tr
+                      td 전적
+                      td
+                        span.num 0
+                        | 승
+                        span.num 0
+                        | 패
+                    tr
+                      td 가넷
+                      td
+                        span.num 0
+            input.ready_btn._ready_btn.eater_font(type='button', value='READY')
+    .msg_area._msg_area
+      .game_log
+        .msg_header
+          .msg_btn_area
+            a.del_btn(href='#')
+              p 지우기
+        .msg_content.game_log_content._game_log_content
+        .msg_footer
+      .chat
+        .msg_header
+          .msg_btn_area
+            a.del_btn(href='#')
+              p 지우기
+        div
+          .msg_content
+            .chat_content._chat_content
+            .chat_input
+              input(type='text')
+              input.send(type='button', value='입력')
+        .msg_footer
+    .choose_layer._choose_layer(style='display: none;')
+      .choose_text
+        p 다음을 선택하십시오
+      .choose_input_area
+        input.choose_btn(type='button', value='배팅')
+        input.choose_btn(type='button', value='스탠드')
+        input.choose_btn(type='button', value='포기')
+    .choose_layer._choose_layer2(style='display: none;')
+      .choose_text
+        p 배팅 금액을 입력하세요
+      .choose_input_area
+        input.choose_input(type='text')
+        input.choose_btn(type='button', value='배팅')
+        input.choose_btn(type='button', value='취소')
+    script(type='text/javascript', src='./js/lib/jquery-1.10.2.min.js')
+    script(type='text/javascript', src='./js/index.js')
+    script(type='text/javascript', src='./js/ui.js')
+    script(type='text/javascript')
+      indian.che.initialize();
