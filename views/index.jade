@@ -3,7 +3,7 @@ html
     meta(http-equiv='Content-Type', content='text/html; charset=utf-8')
     title Indian Holdem
     link(href='http://fonts.googleapis.com/css?family=Eater', rel='stylesheet', type='text/css')
-    link(rel='stylesheet', type='text/css', href='./style/index.css')
+    link(rel='stylesheet', type='text/css', href='style/index.css')
   body
     .header._header
       .logo.eater_font Indian Holdem
@@ -35,21 +35,25 @@ html
                     tr
                       td 가넷
                       td
-                        span.num {user.nGold}
+                        span.num #{user.nGold}
             input.ready_btn._ready_btn.eater_font(type='button', value='READY')
-        .board._board
-          .top_area._top_area
-            .place_wrap.share
-              .place._share
-                .card_wrap._card_wrap
-              .place_name.eater_font SHARE
-          .btm_area._btm_area
-            .place_wrap.deck
-              .place._deck
-                .card_wrap._card_wrap
-                  .card.back
-                    .card_inner
-              .place_name.eater_font DECK
+        .middle_area        
+          .board._board
+            .top_area._top_area
+              .place_wrap.share
+                .place._share
+                  .card_wrap._card_wrap
+                .place_name.eater_font SHARE
+            .btm_area._btm_area
+              .place_wrap.deck
+                .place._deck
+                  .card_wrap._card_wrap
+                    .card.back
+                      .card_inner
+                .place_name.eater_font DECK
+          .bet_box
+              p.bet_title 배팅 금액
+              p.bet_ganet._bet_ganet 0
         .opponent_area
           .hand._opponent_hand
             .card_wrap._card_wrap
@@ -113,8 +117,7 @@ html
         input.choose_input(type='text')
         input.choose_btn(type='button', value='배팅')
         input.choose_btn(type='button', value='취소')
-    script(type='text/javascript', src='./js/lib/jquery-1.10.2.min.js')
-    script(type='text/javascript', src='./js/index.js')
-    script(type='text/javascript', src='./js/ui.js')
-    script(type='text/javascript')
-      indian.che.initialize();
+    script(type='text/javascript', src='js/libs/jquery-1.10.2.js')
+    script(type='text/javascript', src='js/index.js')
+    script(type='text/javascript', src='js/ui.js')
+    script(type='text/javascript') indian.che.initialize();     

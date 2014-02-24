@@ -3,7 +3,7 @@ html
     meta(http-equiv='Content-Type', content='text/html; charset=utf-8')
     title Indian Holdem
     link(href='http://fonts.googleapis.com/css?family=Eater', rel='stylesheet', type='text/css')
-    link(rel='stylesheet', type='text/css', href='./stylesheets/index.css')
+    link(rel='stylesheet', type='text/css', href='./style/index.css')
   body
     .header._header
       .logo.eater_font Indian Holdem
@@ -38,7 +38,7 @@ html
               input(type='submit', value='RANDOM MATCH')
           li.room_menu_item
             h4 방 만들기
-            form(action='/makeRoom')
+            form(action='/makeRoom', method='POST')
               table
                 colgroup
                   col(width='60')
@@ -61,7 +61,7 @@ html
                       input#secretroom(type='checkbox', name='secretroom')
               input(type='submit', value='MAKE ROOM')
           li.room_menu_item
-            h4 직접 입장 하기
+            h4 찾아서 입장 하기
             form(action='/enterRoom')
               table
                 colgroup

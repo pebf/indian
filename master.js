@@ -1,5 +1,5 @@
 var Master = module.exports = {
-	n_START_GOLD : 25
+	n_START_GOLD : 30
 	, aUsers : []
 	, aRooms : []
 	, hasUser : function(sName) {
@@ -66,7 +66,7 @@ var Master = module.exports = {
 	}
 
 	, addRoom : function (sRoomName) {
-		this.rooms.push({
+		this.addRooms.push({
 			name : sRoomName
 			, member : []
 		});

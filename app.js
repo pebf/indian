@@ -71,9 +71,12 @@ app.post('/makeRoom', function(req, res) {
 	// TODO : if sRoomName is dupicated, its process have to doing by ajax call
 	Master.addRoom(sRoomName);
 
+	console.log('session nickname = ' + req.session.nickname);
+	console.log('getUserByName = ' + Master.getUserByName(req.session.name));
+
 	res.render('index', {
 		roomName : sRoomName
-		, user : Master.getUserByName(req.session.nickname)
+		, user : Master.getUserByName(req.session.name)
 	});
 });
 
