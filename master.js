@@ -66,7 +66,7 @@ var Master = module.exports = {
 	}
 
 	, addRoom : function (sRoomName) {
-		this.addRooms.push({
+		this.aRooms.push({
 			name : sRoomName
 			, member : []
 		});

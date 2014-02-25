@@ -48,7 +48,7 @@ html
                     td
                       label(for='roomname') 방이름
                     td
-                      input#roomname(type='text', name='roomname')
+                      input#roomname(type='text', name='roomName')
                   tr
                     td
                       label(for='makeroom_pw') 비밀번호
@@ -86,5 +86,10 @@ html
           .room_area_body
             ul.room_list
               each room in aRoomList
-                 li 
-                   .room_item room.sRoomName
+                 li
+                    .room_item
+                       .room_item_wrap
+                          div.room_title
+                             span #{room.name}
+                          div.room_member                          
+                             span 광식이동생 광수

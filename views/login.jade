@@ -7,13 +7,17 @@ html
     link(rel='stylesheet', type='text/css', href='style/login.css')
   body
      .header._header
-       .logo.eater_font Indian Holdem
+       .logo.eater_font 
+          span.reverse I
+          | ndian 
+          span.reverse H
+          | oldem
     .container#container
       .login_box
           form(action='/waitingRoom', method='POST')
              p.box_logo.eater_font Indian Holdem
              p.box_txt.eater_font Input Your Name
              input.name_input._name(type='text', name='name')
-             input.entrance._go_match(type='submit', value='GO MATCH!!')
+             input.entrance._go_match.eater_font(type='submit', value='GAME START')
      script(type='text/javascript', src='./javascripts/libs/jquery-1.10.2.js')
      script(type='text/javascript', src='./js/login.js')

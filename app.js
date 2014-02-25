@@ -58,6 +58,10 @@ app.post('/waitingRoom', function(req, res) {
 
 	Master.addUser(htUser);
 	req.session.name = sName;
+
+	//debug
+	console.log(Master.getRoomList());
+
 	res.render('waitingroom', {
 		user : htUser
 		, aRoomList : Master.getRoomList()
@@ -71,12 +75,23 @@ app.post('/makeRoom', function(req, res) {
 	// TODO : if sRoomName is dupicated, its process have to doing by ajax call
 	Master.addRoom(sRoomName);
 
-	console.log('session nickname = ' + req.session.nickname);
-	console.log('getUserByName = ' + Master.getUserByName(req.session.name));
-
+	
 	res.render('index', {
 		roomName : sRoomName
 		, user : Master.getUserByName(req.session.name)
+	});
+});
+
+app.get('/join/:id', function(req, res) {
+	var sRoomName = req.params.id;
+
+	if (Master.hasRoom(sRoomName)) {
+		return;
+	}
+
+	res.render('', {
+		sRoomName : sRoomName
+		, sName : req.session.sName
 	});
 });
 

@@ -109,8 +109,6 @@ copy}
 .choose_input{height:28px;font-size: 14px;}
 
 
-
-
 /* waitingroom */
 /* waitingroom - menu */
 .waiting_room{width:1000px;margin: 60px auto;}
@@ -163,3 +161,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1d79f4', end
 .room_ct{float:left;margin-left: 25px;}
 .room_area{width:670px;border: 1px solid #000000;border-radius: 4px;}
 .room_area_body{height: 499px;background-color: rgb(43, 43, 44);border-radius: 0 0 4px 4px;}
+.room_area_body ul{margin: 0 10px;}
+.room_item{background-color: #121212;border: 1px solid #000000;height:57px;font-size: 13px;}
+.room_item_wrap{margin:8px 14px;}
+.room_title{height:23px;}
+.room_title span{color: rgb(255, 227, 3);font-weight: 700;}
+.room_member span{color: rgb(208, 208, 208);font-size: 12px;}
