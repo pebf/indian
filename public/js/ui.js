@@ -1,13 +1,22 @@
 indian.che.ui = (function() {
-	var htElement = {};
+	var htElement = {}
+		, oSocket
+		, htData = {};
 
 	function initialize () {
 		resizeBrowser();
+		initVar();
 		assignHTML();
+		initSocketIO();
 	}
 
 	function resizeBrowser () {
 		window.resizeTo(1024, 696);
+	}
+
+	function initVar() {
+		htData['username'] = ghtInitData.sUserName;
+		htData['roomname'] = ghtInitData.sRoomName;
 	}
 
 	function assignHTML() {
@@ -25,11 +34,20 @@ indian.che.ui = (function() {
 
 		htElement['board_btm'] = htElement['board'].find('._btm_area');
 		htElement['deck_card_wrap'] = htElement['board_btm'].find('._card_wrap');
-
 		htElement['board_card_wrap'] = htElement['board'].find('._card_wrap');
 
-		htElement['msg_area'] = $(document.body).find('> ._msg_area');		
+		htElement['msg_area'] = $(document.body).find('> ._msg_area');
 		htElement['game_log'] = htElement['msg_area'].find('._game_log_content');
+		htElement['chat_box'] = htElement['msg_area'].find('._chat_content');
+	}
+
+	function initSocketIO() {
+		var oSocket = io.connect('/room');
+
+		oSocket.on('connect', function() {
+			oSocket.emit('join', { sRoomName : })
+		});
+
 	}
 
 	function showShareCards(aShareCards) {
