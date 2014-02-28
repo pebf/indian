@@ -53,8 +53,11 @@ var Master = module.exports = {
 	}
 
 	, hasRoom : function (sRoomName) {
-		var aFilteredRoom = this.rooms.filter(function (htRoom) {
-			return (htRoom.sName === sRoomName)
+		console.log('room : sRoomName => ' + sRoomName);
+		console.log('room : aFilteredRooms => ' + sRoomName);
+
+		var aFilteredRooms = this.aRooms.filter(function (htRoom) {
+			return (htRoom.sRoomName === sRoomName)
 		});
 
 		if (aFilteredRooms.length > 0) {
@@ -67,7 +70,7 @@ var Master = module.exports = {
 
 	, addRoom : function (sRoomName) {
 		this.aRooms.push({
-			name : sRoomName
+			sRoomName : sRoomName
 			, member : []
 		});
 	}

@@ -16,8 +16,13 @@ module.exports = function(app) {
 
 	var Room = io.of('/room')
 				.on('connection', function(socket) {
+					console.log('socket : connection');
+
 					var sJoinedRoom = null;
 					socket.on('join', function(htData) {
+						console.log('socket : join');
+						console.log('socket : roomname => ' + htData.sRoomName);
+
 						if (!Master.hasRoom(htData.sRoomName)) {
 							socket.emit('joined', {
 								isSuccess : false

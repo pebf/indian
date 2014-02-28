@@ -85,7 +85,7 @@ indian.che.ui = (function() {
 				sMsg = '카드를 배분합니다.'
 				break;
 			case 'joined' :
-				sMsg = getData['username'] + 'joined game.';
+				sMsg = getData('username') + ' joined game.';
 		}
 		
 		htElement['game_log'].append('<p>' + sMsg + '</p>');
