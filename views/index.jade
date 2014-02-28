@@ -1,14 +1,14 @@
 html
   head
-    meta(http-equiv='Content-Type', content='text/html; charset=utf-8')
-    title Indian Holdem
-    link(href='http://fonts.googleapis.com/css?family=Eater', rel='stylesheet', type='text/css')
-    link(rel='stylesheet', type='text/css', href='style/index.css')
-    script(type='text/javascript')
-    | var ghtInitData = {
-    |   'sUserName' : #{user.sName}
-    |   , 'sRoomName' : #{roomName}
-    | }
+     meta(http-equiv='Content-Type', content='text/html; charset=utf-8')
+     title Indian Holdem
+     link(href='http://fonts.googleapis.com/css?family=Eater', rel='stylesheet', type='text/css')
+     link(rel='stylesheet', type='text/css', href='style/index.css')
+     script(type='text/javascript').
+        var ghtInitData = {
+          'sUserName' : '#{user.sName}'
+          , 'sRoomName' : '#{roomName}'
+          };
   body
     .header._header
       .logo.eater_font Indian Holdem
@@ -125,5 +125,7 @@ html
     script(type='text/javascript', src='js/libs/jquery-1.10.2.js')
     script(type='text/javascript', src='/socket.io/socket.io.js')
     script(type='text/javascript', src='js/index.js')
+    script(type='text/javascript', src='js/socket.js')
     script(type='text/javascript', src='js/ui.js')
-    script(type='text/javascript') indian.che.initialize();
+    script(type='text/javascript').
+       indian.che.initialize();

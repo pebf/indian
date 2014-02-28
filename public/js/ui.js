@@ -1,13 +1,17 @@
 indian.che.ui = (function() {
-	var htElement = {}
-		, oSocket
+	var Socket
+		, htElement = {}		
 		, htData = {};
 
 	function initialize () {
+		Socket = indian.che.socket;
+
 		resizeBrowser();
 		initVar();
 		assignHTML();
-		initSocketIO();
+		Socket.init();
+
+		showGameLog('game_start');
 	}
 
 	function resizeBrowser () {
@@ -17,6 +21,10 @@ indian.che.ui = (function() {
 	function initVar() {
 		htData['username'] = ghtInitData.sUserName;
 		htData['roomname'] = ghtInitData.sRoomName;
+	}
+
+	function getData(sKey) {
+		return htData[sKey];
 	}
 
 	function assignHTML() {
@@ -39,16 +47,7 @@ indian.che.ui = (function() {
 		htElement['msg_area'] = $(document.body).find('> ._msg_area');
 		htElement['game_log'] = htElement['msg_area'].find('._game_log_content');
 		htElement['chat_box'] = htElement['msg_area'].find('._chat_content');
-	}
-
-	function initSocketIO() {
-		var oSocket = io.connect('/room');
-
-		oSocket.on('connect', function() {
-			oSocket.emit('join', { sRoomName : })
-		});
-
-	}
+	}	
 
 	function showShareCards(aShareCards) {
 		console.log('aShareCards = ' + aShareCards);
@@ -80,11 +79,13 @@ indian.che.ui = (function() {
 
 		switch (sCode) {
 			case 'game_start' :
-				sMsg  = '게임을 시작합니다.'
+				sMsg  = '게임을 시작합니다.';
 				break;
 			case 'dealout_card' :
 				sMsg = '카드를 배분합니다.'
 				break;
+			case 'joined' :
+				sMsg = getData['username'] + 'joined game.';
 		}
 		
 		htElement['game_log'].append('<p>' + sMsg + '</p>');
@@ -104,6 +105,7 @@ indian.che.ui = (function() {
 		, showOpponentCard : showOpponentCard
 		, showChooseLayer : showChooseLayer
 		, showGameLog : showGameLog
+		, getData : getData
 	}
 
 })();

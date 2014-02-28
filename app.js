@@ -72,7 +72,7 @@ app.post('/makeRoom', function(req, res) {
 	var sRoomName = req.body.roomName;
 
 	// TODO : if sRoomName is blank, its process have to doing by ajax call
-	// TODO : if sRoomName is dupicated, its process have to doing by ajax call
+	// TODO : if sRoomName is 'dupicated, its process have to doing by ajax call
 	Master.addRoom(sRoomName);
 
 	
@@ -95,6 +95,8 @@ app.get('/join/:id', function(req, res) {
 	});
 });
 
-http.createServer(app).listen(app.get('port'), function(){
+var server = http.createServer(app)
+server.listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
+require('./socket')(server);

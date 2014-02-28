@@ -271,6 +271,3 @@ indian.che = (function() {
 		initialize : initialize
 	}
 })();
-
-
-
