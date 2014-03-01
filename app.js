@@ -57,10 +57,7 @@ app.post('/waitingRoom', function(req, res) {
 	var htUser = Master.createUser(sName);
 
 	Master.addUser(htUser);
-	req.session.name = sName;
-
-	//debug
-	console.log(Master.getRoomList());
+	req.session.sName = sName;
 
 	res.render('waitingroom', {
 		user : htUser
@@ -69,33 +66,36 @@ app.post('/waitingRoom', function(req, res) {
 });
 
 app.post('/makeRoom', function(req, res) {
-	var sRoomName = req.body.roomName;
+	var sRoomName = req.body.roomName
+		, htRoom = Master.createRoom(sRoomName);
 
 	// TODO : if sRoomName is blank, its process have to doing by ajax call
-	// TODO : if sRoomName is 'dupicated, its process have to doing by ajax call
-	Master.addRoom(sRoomName);
+	// TODO : if sRoomName is dupicated, its process have to doing by ajax call
 
+	Master.addRoom(htRoom);
 	
 	res.render('index', {
-		roomName : sRoomName
-		, user : Master.getUserByName(req.session.name)
+		htRoom : htRoom
+		, htUser : Master.getUserByName(req.session.sName)
 	});
 });
 
-app.get('/join/:id', function(req, res) {
-	var sRoomName = req.params.id;
+app.get('/join/:roomId', function(req, res) {
+	var sRoomId = req.params.roomId
+		, htUser = Master.getUserByName(req.session.sName)
+		, htRoom = Master.getRoomById(sRoomId);
 
-	if (Master.hasRoom(sRoomName)) {
+	if (!htRoom) {
 		return;
 	}
 
-	res.render('', {
-		sRoomName : sRoomName
-		, sName : req.session.sName
+	res.render('index', {
+		htRoom : htRoom
+		, htUser : htUser
 	});
 });
 
-var server = http.createServer(app)
+var server = http.createServer(app);
 server.listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });

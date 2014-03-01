@@ -3,11 +3,14 @@ html
      meta(http-equiv='Content-Type', content='text/html; charset=utf-8')
      title Indian Holdem
      link(href='http://fonts.googleapis.com/css?family=Eater', rel='stylesheet', type='text/css')
-     link(rel='stylesheet', type='text/css', href='style/index.css')
+     link(rel='stylesheet', type='text/css', href='/style/index.css')
      script(type='text/javascript').
         var ghtInitData = {
-          'sUserName' : '#{user.sName}'
-          , 'sRoomName' : '#{roomName}'
+          'sUserName' : '#{htUser.sName}'
+          , 'htRoom' : {
+              'sRoomId' : '#{htRoom.sRoomId}'
+              , 'sRoomName' : '#{htRoom.sRoomName}'
+            }
           };
   body
     .header._header
@@ -22,7 +25,7 @@ html
           .player_info._player_info
             .player_box._player_box
               .player_box_header._player_box_header
-                span.player_name._player_name #{user.sName}
+                span.player_name._player_name #{htUser.sName}
                 | 님
               .player_box_body._player_box_body
                 table
@@ -40,7 +43,7 @@ html
                     tr
                       td 가넷
                       td
-                        span.num #{user.nGold}
+                        span.num #{htUser.nGold}
             input.ready_btn._ready_btn.eater_font(type='button', value='READY')
         .middle_area        
           .board._board
@@ -106,7 +109,7 @@ html
             .chat_content._chat_content              
             .chat_input
               input(type='text')
-              input.send(type='button', value='입력')
+              input.send._send_msg(type='button', value='입력')
         .msg_footer
     .choose_layer._choose_layer(style='display: none;')
       .choose_text
@@ -122,10 +125,10 @@ html
         input.choose_input(type='text')
         input.choose_btn(type='button', value='배팅')
         input.choose_btn(type='button', value='취소')
-    script(type='text/javascript', src='js/libs/jquery-1.10.2.js')
+    script(type='text/javascript', src='/js/libs/jquery-1.10.2.js')
     script(type='text/javascript', src='/socket.io/socket.io.js')
-    script(type='text/javascript', src='js/index.js')
-    script(type='text/javascript', src='js/socket.js')
-    script(type='text/javascript', src='js/ui.js')
+    script(type='text/javascript', src='/js/index.js')
+    script(type='text/javascript', src='/js/socket.js')
+    script(type='text/javascript', src='/js/ui.js')
     script(type='text/javascript').
        indian.che.initialize();

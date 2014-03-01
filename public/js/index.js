@@ -35,9 +35,6 @@ indian.che = (function() {
 
 	function gameInit() {		
 		playerInit();
-		boardInit();
-
-		oUi.showGameLog('game_start');
 	}
 
 	function playerInit() {
@@ -86,8 +83,6 @@ indian.che = (function() {
 	}
 
 	function dealoutCard() {
-		oUi.showGameLog('dealout_card');
-
 		aShareCards.push(aDeck.pop());
 		aShareCards.push(aDeck.pop());
 

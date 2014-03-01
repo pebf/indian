@@ -15,33 +15,36 @@ module.exports = function(app) {
 	});
 
 	var Room = io.of('/room')
-				.on('connection', function(socket) {
-					console.log('socket : connection');
+				.on('connection', socketInit);
 
-					var sJoinedRoom = null;
-					socket.on('join', function(htData) {
-						console.log('socket : join');
-						console.log('socket : roomname => ' + htData.sRoomName);
+	function socketInit(socket) {
+		var sJoinedRoom = null;
+		socket.on('join', processJoin.bind(this, socket));
+		socket.on('msg', processMsg.bind(this, socket));
+	}
 
-						if (!Master.hasRoom(htData.sRoomName)) {
-							socket.emit('joined', {
-								isSuccess : false
-							});
-							
-							return;
-						}
+	function processJoin(socket, htData) {
+		if (!Master.getRoomById(htData.sRoomId)) {
+			socket.emit('joined', {
+				isSuccess : false
+			});
+			return;
+		}
 
-						sJoinedRoom = htData.sRoomName;
-						socket.join(sJoinedRoom);
-						socket.emit('joined', {
-							isSuccess : true
-							, sUserName : htData.sUserName
-						});
+		sJoinedRoomId = htData.sRoomId;
+		socket.join(sJoinedRoomId);
+		socket.emit('joined', {
+			isSuccess : true
+			, sUserName : htData.sUserName
+		});
 
-						socket.broadcast.to(sJoinedRoom).emit('joined', {
-							isSuccess : true
-							, sUserName : htData.sUserName
-						});
-					});
-				});
+		socket.broadcast.to(sJoinedRoomId).emit('joined', {
+			isSuccess : true
+			, sUserName : htData.sUserName
+		});
+	}
+
+	function processMsg(socket, htData) {
+		socket.broadcast.to(htData.sRoomId).emit('msg', htData);
+	}
 }

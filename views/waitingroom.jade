@@ -87,9 +87,10 @@ html
             ul.room_list
               each room in aRoomList
                  li
-                    .room_item
-                       .room_item_wrap
-                          div.room_title
-                             span #{room.name}
-                          div.room_member                          
-                             span 광식이동생 광수
+                    a(href="/join/#{room.sRoomId}")
+                       .room_item
+                          .room_item_wrap
+                             div.room_title
+                                span #{room.sRoomName}
+                             div.room_member                          
+                                span 광식이동생 광수

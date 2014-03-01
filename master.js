@@ -2,6 +2,7 @@ var Master = module.exports = {
 	n_START_GOLD : 30
 	, aUsers : []
 	, aRooms : []
+	, nRoomIndexCnt : 0
 	, hasUser : function(sName) {
 		var aUsers = this.aUsers.filter(function(htUser) {
 			return (htUser.sName === sName);
@@ -34,7 +35,7 @@ var Master = module.exports = {
 		var aUsers = this.aUsers.filter(function(htUser) {
 			return (htUser.sName === sName);
 		});
-
+		
 		return aUsers[0];
 	}
 
@@ -52,10 +53,15 @@ var Master = module.exports = {
 		return bIsValid;	
 	}
 
-	, hasRoom : function (sRoomName) {
-		console.log('room : sRoomName => ' + sRoomName);
-		console.log('room : aFilteredRooms => ' + sRoomName);
+	, createRoom : function(sRoomName) {
+		this.nRoomIndexCnt += 1;
 
+		return { sRoomId : this.nRoomIndexCnt + ''
+			, sRoomName : sRoomName
+			, member : []}		
+	}
+
+	, hasRoom : function (sRoomName) {
 		var aFilteredRooms = this.aRooms.filter(function (htRoom) {
 			return (htRoom.sRoomName === sRoomName)
 		});
@@ -68,14 +74,20 @@ var Master = module.exports = {
 		}
 	}
 
-	, addRoom : function (sRoomName) {
-		this.aRooms.push({
-			sRoomName : sRoomName
-			, member : []
-		});
+	, addRoom : function (htRoom) {
+		//TODO : htRoom validation
+		this.aRooms.push(htRoom);
 	}
 
 	, getRoomList : function () {
 		return this.aRooms;
+	}
+
+	, getRoomById : function (sRoomId) {
+		var aRooms = this.aRooms.filter(function(htRoom) {
+			return (htRoom.sRoomId === sRoomId);
+		});
+		
+		return aRooms[0];
 	}
 }

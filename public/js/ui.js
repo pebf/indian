@@ -9,9 +9,8 @@ indian.che.ui = (function() {
 		resizeBrowser();
 		initVar();
 		assignHTML();
+		attachEvent();
 		Socket.init();
-
-		showGameLog('game_start');
 	}
 
 	function resizeBrowser () {
@@ -20,7 +19,7 @@ indian.che.ui = (function() {
 
 	function initVar() {
 		htData['username'] = ghtInitData.sUserName;
-		htData['roomname'] = ghtInitData.sRoomName;
+		htData['room'] = ghtInitData.htRoom;
 	}
 
 	function getData(sKey) {
@@ -47,7 +46,36 @@ indian.che.ui = (function() {
 		htElement['msg_area'] = $(document.body).find('> ._msg_area');
 		htElement['game_log'] = htElement['msg_area'].find('._game_log_content');
 		htElement['chat_box'] = htElement['msg_area'].find('._chat_content');
-	}	
+	}
+
+	function attachEvent() {
+		$(document.body).on('click', onClick);
+	}
+
+	function onClick(we) {
+		var welTarget = $(we.target);		
+
+		if (welTarget.hasClass('_send_msg')) {
+			sendMsg.bind(this, welTarget)();
+		}
+	}
+
+	function sendMsg(welTarget) {
+		var welMsgInput = welTarget.prev()
+			, sMsg = welMsgInput.val();
+
+		if (!sMsg || $.trim(sMsg) === '') {
+			return;
+		}
+
+		Socket.sendMsg(sMsg);
+		welMsgInput.val('');
+	}
+
+	function showMsg(sMsg) {
+		var elMsg = '<p>' + sMsg + '</p>';
+		htElement['msg_area'].append(elMsg);
+	}
 
 	function showShareCards(aShareCards) {
 		console.log('aShareCards = ' + aShareCards);
@@ -85,10 +113,15 @@ indian.che.ui = (function() {
 				sMsg = '카드를 배분합니다.'
 				break;
 			case 'joined' :
-				sMsg = getData('username') + ' joined game.';
+				sMsg = htOption.sUserName + '님이 입장하셨습니다.';
 		}
 		
 		htElement['game_log'].append('<p>' + sMsg + '</p>');
+	}
+
+	function showMsg(htData) {
+		var sMsg = '<p>' + htData.sUserName + ': ' + htData.sMsg + '</p>';
+		htElement['chat_box'].append(sMsg);
 	}
 
 	function showChooseLayer() {
@@ -97,7 +130,7 @@ indian.che.ui = (function() {
 		
 		elChooseLayer.css('left', nLeft);
 		elChooseLayer.show();
-	}	
+	}
 
 	return {
 		initialize : initialize
@@ -105,6 +138,7 @@ indian.che.ui = (function() {
 		, showOpponentCard : showOpponentCard
 		, showChooseLayer : showChooseLayer
 		, showGameLog : showGameLog
+		, showMsg : showMsg
 		, getData : getData
 	}
 
