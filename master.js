@@ -58,7 +58,7 @@ var Master = module.exports = {
 
 		return { sRoomId : this.nRoomIndexCnt + ''
 			, sRoomName : sRoomName
-			, member : []}		
+			, aMember : []}		
 	}
 
 	, hasRoom : function (sRoomName) {
@@ -89,5 +89,24 @@ var Master = module.exports = {
 		});
 		
 		return aRooms[0];
+	}
+
+	, joinRoom : function (sRoomId, htUser) {
+		var htRoom = getRoomById(sRoomId);
+
+		if (this.isMemberInRoom(htRoom.aMember, htUser)) {
+			htRoom.aMember.push(htUser);
+		}
+	}
+
+	, isMemberInRoom : function (aMember, htUser) {
+		return aMember.some(function (elem) {
+			return elem.sName === htUser.sName;
+		});
+	}
+
+	, getMemberList : function (sRoomId) {
+		var htRoom = getRoomById(sRoomId);
+		return htRoom.aMember;
 	}
 }
