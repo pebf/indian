@@ -24,14 +24,15 @@ module.exports = function(app) {
 	}
 
 	function processJoin(socket, htData) {
+		var sJoinedRoomId = htData.sRoomId;
+
 		if (!Master.getRoomById(htData.sRoomId)) {
 			socket.emit('joined', {
 				isSuccess : false
 			});
 			return;
 		}
-
-		sJoinedRoomId = htData.sRoomId;
+		
 		socket.join(sJoinedRoomId);
 		socket.emit('joined', {
 			isSuccess : true
@@ -45,6 +46,8 @@ module.exports = function(app) {
 	}
 
 	function processMsg(socket, htData) {
+		// TODO : 메소드를 한 번만 사용할 수 없을까?
+		socket.emit('msg', htData);
 		socket.broadcast.to(htData.sRoomId).emit('msg', htData);
 	}
 }

@@ -108,8 +108,10 @@ html
           .msg_content
             .chat_content._chat_content              
             .chat_input
-              input(type='text')
-              input.send._send_msg(type='button', value='입력')
+               div
+                  input._input_msg(type='text', onkeydown="indian.che.ui.inputMsg(event, this)")
+               div
+                  input.send._send_msg(type='button', value='입력')
         .msg_footer
     .choose_layer._choose_layer(style='display: none;')
       .choose_text

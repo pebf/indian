@@ -61,15 +61,27 @@ indian.che.ui = (function() {
 	}
 
 	function sendMsg(welTarget) {
-		var welMsgInput = welTarget.prev()
-			, sMsg = welMsgInput.val();
+		var welInput = welTarget.parent().parent().find('input._input_msg');			
+		procSendMsg(welInput);
+	}
+
+	function inputMsg(event, elTarget) {
+		if (event.keyCode !== 13) { // 13 : enter keycode
+			return;
+		}
+		
+		procSendMsg($(elTarget));
+	}
+
+	function procSendMsg(welInput) {		
+		var sMsg = welInput.val();
 
 		if (!sMsg || $.trim(sMsg) === '') {
 			return;
 		}
 
 		Socket.sendMsg(sMsg);
-		welMsgInput.val('');
+		welInput.val('');
 	}
 
 	function showMsg(sMsg) {
@@ -120,8 +132,11 @@ indian.che.ui = (function() {
 	}
 
 	function showMsg(htData) {
-		var sMsg = '<p>' + htData.sUserName + ': ' + htData.sMsg + '</p>';
+		var sMsg = '<p>' + htData.sUserName + ' : ' + htData.sMsg + '</p>'
+			, elChatBox = htElement['chat_box'][0];
+		
 		htElement['chat_box'].append(sMsg);
+		elChatBox.scrollTop = elChatBox.scrollHeight;
 	}
 
 	function showChooseLayer() {
@@ -140,6 +155,7 @@ indian.che.ui = (function() {
 		, showGameLog : showGameLog
 		, showMsg : showMsg
 		, getData : getData
+		, inputMsg : inputMsg
 	}
 
 })();
