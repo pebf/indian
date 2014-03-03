@@ -60,7 +60,22 @@ module.exports = function(app) {
 	}
 
 	function processGameReady(socket, htData) {
+		var sRoomId = htData.sRoomId
+			, htRoom = Master.getRoomById(sRoomId);
+
+		htRoom.nReadyUser += 1;
+
 		socket.emit('game_ready_ok', htData);
-		socket.broadcast.to(htData.sRoomId).emit('game_ready_ok', htData);
+		socket.broadcast.to(sRoomId).emit('game_ready_ok', htData);
+
+		if (htRoom.nReadyUser > 1) {
+			htRoom.nReadyUser = 0;
+			sendGameStart(socket, sRoomId);
+		}
+	}
+
+	function sendGameStart(socket, sRoomId) {
+		socket.emit('game_start', {});
+		socket.broadcast.to(sRoomId).emit('game_start', {});
 	}
 }

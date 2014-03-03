@@ -58,7 +58,8 @@ var Master = module.exports = {
 
 		return { sRoomId : this.nRoomIndexCnt + ''
 			, sRoomName : sRoomName
-			, aMember : []}		
+			, aMember : []
+			, nReadyUser : 0}		
 	}
 
 	, hasRoom : function (sRoomName) {

@@ -109,14 +109,32 @@ indian.che.ui = (function() {
 	}
 
 	function processGameReady(sUserName) {
-		var welArea = (sUserName === getData('username')) ? htElement['user_info'] : htElement['opponent_info']
-			, welBtn = welArea.find('._ready_btn');
+		var welBtn = findReadyBtn(sUserName === getData('username'));
 
 		welBtn.addClass('already')
 			.removeClass('ready')
 			.val('READY');
 
 		showGameLog('game_ready', {sUserName : sUserName});
+	}
+
+	function processGameStart() {
+		hideReadyBtn(findReadyBtn(true));
+		hideReadyBtn(findReadyBtn());
+
+		showGameLog('game_start');
+	}
+
+	function hideReadyBtn(welBtn) {
+		welBtn.hide()
+			.addClass('ready')
+			.removeClass('already')
+			.val('GAME_START');
+	}
+
+	function findReadyBtn(bIsUser) {
+		var welArea = (bIsUser) ? htElement['user_info'] : htElement['opponent_info']
+		return welArea.find('._ready_btn');
 	}
 
 	function showOpponentInfo(aMember) {
@@ -182,10 +200,10 @@ indian.che.ui = (function() {
 				sMsg = '카드를 배분합니다.'
 				break;
 			case 'joined' :
-				sMsg = htOption.sUserName + '님이 입장하셨습니다.';
+				sMsg = '<strong>' + htOption.sUserName + '</strong> 님이 입장하셨습니다.';
 				break;
 			case 'game_ready' :
-				sMsg = htOption.sUserName + '님 준비.';
+				sMsg = '<strong>' + htOption.sUserName + '</strong> 님 준비.';
 				break;
 		}
 		
@@ -219,6 +237,7 @@ indian.che.ui = (function() {
 		, getData : getData
 		, inputMsg : inputMsg
 		, processGameReady : processGameReady
+		, processGameStart : processGameStart
 	}
 
 })();

@@ -13,7 +13,9 @@ indian.che.socket =(function() {
 		oSocket.on('connect', sendJoin);
 		oSocket.on('joined', processJoined);
 		oSocket.on('msg', processMsg);
+
 		oSocket.on('game_ready_ok', processGameReadyOk);
+		oSocket.on('game_start', processGameStart);
 	}
 
 	function sendJoin() {
@@ -55,6 +57,10 @@ indian.che.socket =(function() {
 
 	function processGameReadyOk(htData) {
 		Ui.processGameReady(htData.sUserName);
+	}
+
+	function processGameStart() {
+		Ui.processGameStart();
 	}
 
 	return {
