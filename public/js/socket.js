@@ -13,6 +13,7 @@ indian.che.socket =(function() {
 		oSocket.on('connect', sendJoin);
 		oSocket.on('joined', processJoined);
 		oSocket.on('msg', processMsg);
+		oSocket.on('game_ready_ok', processGameReadyOk);
 	}
 
 	function sendJoin() {
@@ -24,10 +25,10 @@ indian.che.socket =(function() {
 
 	function processJoined(htData) {
 		if (htData.isSuccess) {
-			Ui.showGameLog('joined', { sUserName : htData.sUserName});			
-			console.log(htData);
+			Ui.showGameLog('joined', { sUserName : htData.sUserName});
 			
 			if (htData.htRoom) {
+
 				Ui.showOpponentInfo(htData.htRoom.aMember);
 			}
 		}
@@ -45,9 +46,20 @@ indian.che.socket =(function() {
 		Ui.showMsg(htData);
 	}
 
+	function sendGameReady() {
+		oSocket.emit('game_ready', {
+			sRoomId : Ui.getData('room')['sRoomId']
+			, sUserName : Ui.getData('username')
+		});
+	}
+
+	function processGameReadyOk(htData) {
+		Ui.processGameReady(htData.sUserName);
+	}
 
 	return {
 		init : init
-		, sendMsg : sendMsg		
+		, sendMsg : sendMsg
+		, sendGameReady : sendGameReady
 	}
 }());

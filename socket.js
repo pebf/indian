@@ -21,6 +21,8 @@ module.exports = function(app) {
 		var sJoinedRoom = null;
 		socket.on('join', processJoin.bind(this, socket));
 		socket.on('msg', processMsg.bind(this, socket));
+
+		socket.on('game_ready', processGameReady.bind(this, socket));
 	}
 
 	function processJoin(socket, htData) {
@@ -55,5 +57,10 @@ module.exports = function(app) {
 		// TODO : 메소드를 한 번만 사용할 수 없을까?
 		socket.emit('msg', htData);
 		socket.broadcast.to(htData.sRoomId).emit('msg', htData);
+	}
+
+	function processGameReady(socket, htData) {
+		socket.emit('game_ready_ok', htData);
+		socket.broadcast.to(htData.sRoomId).emit('game_ready_ok', htData);
 	}
 }

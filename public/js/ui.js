@@ -63,6 +63,11 @@ indian.che.ui = (function() {
 
 		if (welTarget.hasClass('_send_msg')) {
 			sendMsg.bind(this, welTarget)();
+			we.preventDefault();
+
+		} else if (welTarget.hasClass('_ready_btn')) {
+			readyForGame(welTarget);
+			we.preventDefault();
 		}
 	}
 
@@ -95,6 +100,25 @@ indian.che.ui = (function() {
 		htElement['msg_area'].append(elMsg);
 	}
 
+	function readyForGame(welTarget) {
+		if (!welTarget.hasClass('user')) {
+			return;
+		}
+
+		Socket.sendGameReady();
+	}
+
+	function processGameReady(sUserName) {
+		var welArea = (sUserName === getData('username')) ? htElement['user_info'] : htElement['opponent_info']
+			, welBtn = welArea.find('._ready_btn');
+
+		welBtn.addClass('already')
+			.removeClass('ready')
+			.val('READY');
+
+		showGameLog('game_ready', {sUserName : sUserName});
+	}
+
 	function showOpponentInfo(aMember) {
 		if (aMember.length < 2) {
 			return;
@@ -104,7 +128,7 @@ indian.che.ui = (function() {
 			, welPlayerBox = htElement['opponent_info'].find('> ._player_box')
 			, welName = welPlayerBox.find('> ._player_box_header > ._player_name')
 			, welGold = welPlayerBox.find('> ._player_box_body  ._ganet');
-		
+
 		welName.html(htOpponent.sName);
 		welGold.html(htOpponent.nGold);
 	}
@@ -159,6 +183,10 @@ indian.che.ui = (function() {
 				break;
 			case 'joined' :
 				sMsg = htOption.sUserName + '님이 입장하셨습니다.';
+				break;
+			case 'game_ready' :
+				sMsg = htOption.sUserName + '님 준비.';
+				break;
 		}
 		
 		htElement['game_log'].append('<p>' + sMsg + '</p>');
@@ -190,6 +218,7 @@ indian.che.ui = (function() {
 		, showMsg : showMsg
 		, getData : getData
 		, inputMsg : inputMsg
+		, processGameReady : processGameReady
 	}
 
 })();

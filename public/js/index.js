@@ -27,7 +27,7 @@ indian.che = (function() {
 		oUi.showShareCards(aShareCards);
 		oUi.showOpponentCard(user.card, opponent.card);
 
-		oUi.showChooseLayer();
+		//oUi.showChooseLayer();
 
 		//calcurateResult();
 		//console.log(judgeWhoIsWin());
