@@ -24,7 +24,12 @@ indian.che.socket =(function() {
 
 	function processJoined(htData) {
 		if (htData.isSuccess) {
-			Ui.showGameLog('joined', { sUserName : htData.sUserName});
+			Ui.showGameLog('joined', { sUserName : htData.sUserName});			
+			console.log(htData);
+			
+			if (htData.htRoom) {
+				Ui.showOpponentInfo(htData.htRoom.aMember);
+			}
 		}
 	}
 

@@ -92,9 +92,9 @@ var Master = module.exports = {
 	}
 
 	, joinRoom : function (sRoomId, htUser) {
-		var htRoom = getRoomById(sRoomId);
+		var htRoom = this.getRoomById(sRoomId);
 
-		if (this.isMemberInRoom(htRoom.aMember, htUser)) {
+		if (!this.isMemberInRoom(htRoom.aMember, htUser)) {
 			htRoom.aMember.push(htUser);
 		}
 	}

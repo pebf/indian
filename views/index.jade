@@ -9,7 +9,7 @@ html
           'sUserName' : '#{htUser.sName}'
           , 'htRoom' : {
               'sRoomId' : '#{htRoom.sRoomId}'
-              , 'sRoomName' : '#{htRoom.sRoomName}'
+              , 'sRoomName' : '#{htRoom.sRoomName}'              
             }
           };
   body
@@ -17,7 +17,7 @@ html
       .logo.eater_font Indian Holdem
     .game._game
       .game_ct._game_ct
-        .user_area
+        .user_area._user_area
           .hand._user_hand
             .card_wrap._card_wrap
               .card.back
@@ -43,7 +43,7 @@ html
                     tr
                       td 가넷
                       td
-                        span.num #{htUser.nGold}
+                        span.num._ganet #{htUser.nGold}
             input.ready_btn._ready_btn.eater_font(type='button', value='READY')
         .middle_area        
           .board._board
@@ -62,7 +62,7 @@ html
           .bet_box
               p.bet_title 배팅 금액
               p.bet_ganet._bet_ganet 0
-        .opponent_area
+        .opponent_area._opponent_area
           .hand._opponent_hand
             .card_wrap._card_wrap
               .card
@@ -89,7 +89,7 @@ html
                     tr
                       td 가넷
                       td
-                        span.num 0
+                        span.num._ganet 0
             input.ready_btn._ready_btn.eater_font(type='button', value='READY')
     .msg_area._msg_area
       .game_log

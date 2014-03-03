@@ -30,12 +30,18 @@ indian.che.ui = (function() {
 		htElement['header'] = $(document.body).find('> ._header');
 
 		htElement['game'] = $(document.body).find('> ._game');
-		htElement['user_hand'] = htElement['game'].find('> ._user_hand');
-		htElement['user_card_wrap'] = htElement['user_hand'].find('>._card_wrap');
+		htElement['game_ct'] = htElement['game'].find('> ._game_ct');
+
+		htElement['user_area'] = htElement['game_ct'].find('> ._user_area');
+		htElement['user_hand'] = htElement['user_area'].find('> ._user_hand');		
+		htElement['user_card_wrap'] = htElement['user_hand'].find('> ._card_wrap');
+		htElement['user_info'] = htElement['user_area'].find('> ._player_info');
+		htElement['opponent_area'] = htElement['game_ct'].find('> ._opponent_area');
 		htElement['opponent_hand'] = htElement['game'].find('> ._oppenent_hand');
 		htElement['opponent_card_wrap'] = htElement['opponent_hand'].find('>._card_wrap');
-		htElement['board'] = htElement['game'].find('> .game_ct > ._board');
+		htElement['opponent_info'] = htElement['opponent_area'].find('> ._player_info');
 
+		htElement['board'] = htElement['game'].find('> .game_ct > ._board');
 		htElement['board_top'] = htElement['board'].find('._top_area');
 		htElement['share_card_wrap'] = htElement['board_top'].find('._card_wrap');
 
@@ -87,6 +93,33 @@ indian.che.ui = (function() {
 	function showMsg(sMsg) {
 		var elMsg = '<p>' + sMsg + '</p>';
 		htElement['msg_area'].append(elMsg);
+	}
+
+	function showOpponentInfo(aMember) {
+		if (aMember.length < 2) {
+			return;
+		}
+
+		var htOpponent = findOpponentInMember(aMember)
+			, welPlayerBox = htElement['opponent_info'].find('> ._player_box')
+			, welName = welPlayerBox.find('> ._player_box_header > ._player_name')
+			, welGold = welPlayerBox.find('> ._player_box_body  ._ganet');
+		
+		welName.html(htOpponent.sName);
+		welGold.html(htOpponent.nGold);
+	}
+
+	function findOpponentInMember(aMember) {
+		var htMember;
+
+		for(var i = 0, nLength = aMember.length; i < nLength; i++) {
+			htMember = aMember[i];
+			if (htMember.sName !== getData('username')) {
+				return htMember;
+			}
+		}
+
+		return null;
 	}
 
 	function showShareCards(aShareCards) {
@@ -153,6 +186,7 @@ indian.che.ui = (function() {
 		, showOpponentCard : showOpponentCard
 		, showChooseLayer : showChooseLayer
 		, showGameLog : showGameLog
+		, showOpponentInfo : showOpponentInfo
 		, showMsg : showMsg
 		, getData : getData
 		, inputMsg : inputMsg

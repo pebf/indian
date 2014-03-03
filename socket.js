@@ -24,7 +24,9 @@ module.exports = function(app) {
 	}
 
 	function processJoin(socket, htData) {
-		var sJoinedRoomId = htData.sRoomId;
+		var sJoinedRoomId = htData.sRoomId
+			, htUser = Master.getUserByName(htData.sUserName)
+			, htRoom = Master.getRoomById(sJoinedRoomId);
 
 		if (!Master.getRoomById(htData.sRoomId)) {
 			socket.emit('joined', {
@@ -32,17 +34,21 @@ module.exports = function(app) {
 			});
 			return;
 		}
+
+		Master.joinRoom(sJoinedRoomId, htUser);
 		
 		socket.join(sJoinedRoomId);
 		socket.emit('joined', {
 			isSuccess : true
 			, sUserName : htData.sUserName
+			, htRoom : htRoom
 		});
 
 		socket.broadcast.to(sJoinedRoomId).emit('joined', {
 			isSuccess : true
 			, sUserName : htData.sUserName
-		});
+			, htRoom : htRoom
+		});		
 	}
 
 	function processMsg(socket, htData) {

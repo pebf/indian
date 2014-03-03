@@ -92,5 +92,6 @@ html
                           .room_item_wrap
                              div.room_title
                                 span #{room.sRoomName}
-                             div.room_member                          
-                                span 광식이동생 광수
+                             div.room_member
+                                each member in room.aMember
+                                   span #{member.sName}

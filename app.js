@@ -67,7 +67,8 @@ app.post('/waitingRoom', function(req, res) {
 
 app.post('/makeRoom', function(req, res) {
 	var sRoomName = req.body.roomName
-		, htRoom = Master.createRoom(sRoomName);
+		, htRoom = Master.createRoom(sRoomName)
+		, htUser = Master.getUserByName(req.session.sName);
 
 	// TODO : if sRoomName is blank, its process have to doing by ajax call
 	// TODO : if sRoomName is dupicated, its process have to doing by ajax call
@@ -76,7 +77,7 @@ app.post('/makeRoom', function(req, res) {
 	
 	res.render('index', {
 		htRoom : htRoom
-		, htUser : Master.getUserByName(req.session.sName)
+		, htUser : htUser
 	});
 });
 
