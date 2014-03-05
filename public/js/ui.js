@@ -194,16 +194,16 @@ indian.che.ui = (function() {
 
 		switch (sCode) {
 			case 'game_start' :
-				sMsg  = '게임을 시작합니다.';
+				sMsg  = '게임을 시작합니다';
 				break;
 			case 'dealout_card' :
-				sMsg = '카드를 배분합니다.'
+				sMsg = '카드를 배분합니다'
 				break;
 			case 'joined' :
-				sMsg = '<strong>' + htOption.sUserName + '</strong> 님이 입장하셨습니다.';
+				sMsg = '<strong>' + htOption.sUserName + '</strong> 님이 입장하셨습니다';
 				break;
 			case 'game_ready' :
-				sMsg = '<strong>' + htOption.sUserName + '</strong> 님 준비.';
+				sMsg = '<strong>' + htOption.sUserName + '</strong> 님 준비';
 				break;
 		}
 		

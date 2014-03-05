@@ -1,7 +1,7 @@
 var Master = module.exports = {
 	n_START_GOLD : 30
 	, aUsers : []
-	, aRooms : []
+	, aRooms : []	
 	, nRoomIndexCnt : 0
 	, hasUser : function(sName) {
 		var aUsers = this.aUsers.filter(function(htUser) {
@@ -107,7 +107,107 @@ var Master = module.exports = {
 	}
 
 	, getMemberList : function (sRoomId) {
-		var htRoom = getRoomById(sRoomId);
+		var htRoom = this.getRoomById(sRoomId);
 		return htRoom.aMember;
+	}
+
+	, gameSetting : function (htRoom) {		
+		this.setGame(htRoom);
+		this.setUserForGame(htRoom);
+		this.dealoutCard(htRoom);
+	}
+
+	, setGame : function (htRoom) {
+		htRoom.htGame = this.createGame();
+	}
+
+	, createGame : function () {
+		return {
+			aDeck : this.getNewDeck()
+			, aShareCards : []
+			, sUserHasTurn : ''
+			, aCardInHands : []
+			, nBetMoney : 0
+		}
+	}
+
+	, getNewDeck : function () {
+		var aDeck = this.createDeck();
+		return this.shuffleDeck(aDeck);
+	}
+
+	, createDeck : function () {
+		var aDeck = [];
+
+		for(var i = 1; i < 11; i++) {
+			for(var j = 0; j < 4; j++) {
+				aDeck.push(i);
+			}
+		}
+
+		return aDeck;
+	}
+
+	, shuffleDeck : function (aDeck, nCount) {
+		var nShuffleCount = nShuffleCount || 200
+			, nCardNum = aDeck.length
+			, nRan1, nRan2, nTemp;
+
+		for (var i = 0; i < nShuffleCount; i++) {
+			nRan1 =  Math.floor(Math.random() * nCardNum);
+			nRan2 =  Math.floor(Math.random() * nCardNum);
+
+			nTemp = aDeck[nRan1];
+			aDeck[nRan1] = aDeck[nRan2];
+			aDeck[nRan2] = nTemp;
+		}
+
+		return aDeck;
+	}
+
+	, setUserForGame : function (htRoom) {
+		var aNames = this.getUserNameFromMember(htRoom)
+			, htGame = htRoom.htGame;
+
+		htGame.sUserHasTurn = aNames[0];
+
+		for (var i = 0, nLength = aNames.length; i < nLength; i++) {
+			htGame.aCardInHands.push({sName : aNames[i]
+										, nCard : 0});
+		}
+	}
+
+	, getUserNameFromMember : function (htRoom) {
+		var aUserNames = []
+			, aMember = htRoom.aMember;
+
+		for (var i = 0, nLength = aMember.length; i < nLength; i++) {			
+			aUserNames.push(aMember[i].sName);
+		}
+
+		return aUserNames;
+	}
+
+	, dealoutCard : function (htRoom) {
+		var htGame = htRoom.htGame
+			, aDeck = htGame.aDeck
+			, aShareCards = htGame.aShareCards;
+
+		aShareCards.push(aDeck.pop(), aDeck.pop());
+		htGame.aCardInHands[0].nCard = aDeck.pop();
+		htGame.aCardInHands[1].nCard = aDeck.pop();
+	}
+
+	, getOpponentCard : function (htGame, sUserName) {
+		var aCardInHands = htGame.aCardInHands
+			, htCardInfo;
+
+		for (var i = 0, nLength = aCardInHands.length; i < nLength; i++) {
+			htCardInfo = aCardInHands[i];
+
+			if (htCardInfo.sName !== sUserName) {
+				return htCardInfo.nCard;
+			}
+		}
 	}
 }

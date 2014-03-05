@@ -17,15 +17,15 @@ indian.che = (function() {
 		//UI
 		oUi.initialize();
 
-		gameInit();
+		// gameInit();
 
-		makeDeck();
-		shuffleDeck();
+		// makeDeck();
+		// shuffleDeck();
 
-		dealoutCard();
+		// dealoutCard();
 		
-		oUi.showShareCards(aShareCards);
-		oUi.showOpponentCard(user.card, opponent.card);
+		//oUi.showShareCards(aShareCards);
+		//oUi.showOpponentCard(user.card, opponent.card);
 
 		//oUi.showChooseLayer();
 

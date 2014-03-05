@@ -4,7 +4,7 @@ module.exports = function(app) {
 	var io = require('socket.io').listen(app);
 
 	io.configure(function() {
-		io.set('log level', 3);
+		io.set('log level', 2);
 		io.set('transports', [
 			'websocket'
 			, 'flashsocket'
@@ -23,6 +23,7 @@ module.exports = function(app) {
 		socket.on('msg', processMsg.bind(this, socket));
 
 		socket.on('game_ready', processGameReady.bind(this, socket));
+		socket.on('game_start', processGameInit.bind(this, socket));
 	}
 
 	function processJoin(socket, htData) {
@@ -63,19 +64,27 @@ module.exports = function(app) {
 		var sRoomId = htData.sRoomId
 			, htRoom = Master.getRoomById(sRoomId);
 
-		htRoom.nReadyUser += 1;
+		htRoom.nReadyUser += 1;		
 
 		socket.emit('game_ready_ok', htData);
 		socket.broadcast.to(sRoomId).emit('game_ready_ok', htData);
 
 		if (htRoom.nReadyUser > 1) {
 			htRoom.nReadyUser = 0;
-			sendGameStart(socket, sRoomId);
+			Master.gameSetting(htRoom);
+
+			socket.emit('game_start', htData);
+			socket.broadcast.to(sRoomId).emit('game_start', htData);
 		}
 	}
 
-	function sendGameStart(socket, sRoomId) {
-		socket.emit('game_start', {});
-		socket.broadcast.to(sRoomId).emit('game_start', {});
+	function processGameInit(socket, htData) {
+		var htGame = Master.getRoomById(htData.sRoomId).htGame
+			, nOpponentCard = Master.getOpponentCard(htGame, htData.sUserName);
+
+		socket.emit('game_init', {
+			aShareCards : htGame.aShareCards
+			, nOpponentCard : nOpponentCard
+		});
 	}
 }
