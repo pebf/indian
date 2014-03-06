@@ -37,11 +37,11 @@ indian.che.ui = (function() {
 		htElement['user_card_wrap'] = htElement['user_hand'].find('> ._card_wrap');
 		htElement['user_info'] = htElement['user_area'].find('> ._player_info');
 		htElement['opponent_area'] = htElement['game_ct'].find('> ._opponent_area');
-		htElement['opponent_hand'] = htElement['game'].find('> ._oppenent_hand');
-		htElement['opponent_card_wrap'] = htElement['opponent_hand'].find('>._card_wrap');
+		htElement['opponent_hand'] = htElement['opponent_area'].find('> ._opponent_hand');
+		htElement['opponent_card_wrap'] = htElement['opponent_hand'].find('> ._card_wrap');
 		htElement['opponent_info'] = htElement['opponent_area'].find('> ._player_info');
 
-		htElement['board'] = htElement['game'].find('> .game_ct > ._board');
+		htElement['board'] = htElement['game'].find('> .game_ct > ._middle_area > ._board');
 		htElement['board_top'] = htElement['board'].find('._top_area');
 		htElement['share_card_wrap'] = htElement['board_top'].find('._card_wrap');
 
@@ -101,7 +101,7 @@ indian.che.ui = (function() {
 	}
 
 	function readyForGame(welTarget) {
-		if (!welTarget.hasClass('user')) {
+		if (!welTarget.hasClass('user') || welTarget.hasClass('already')) {
 			return;
 		}
 
@@ -123,6 +123,14 @@ indian.che.ui = (function() {
 		hideReadyBtn(findReadyBtn());
 
 		showGameLog('game_start');
+	}
+
+	function processGameInit(htData) {
+		showShareCards(htData.aShareCards);
+		showGameLog('game_show_share_cards', {aShareCards : htData.aShareCards});
+
+		showOpponentCard(htData.nOpponentCard);
+		showGameLog('game_show_opponent_card', {nOpponentCard : htData.nOpponentCard});
 	}
 
 	function hideReadyBtn(welBtn) {
@@ -165,18 +173,24 @@ indian.che.ui = (function() {
 	}
 
 	function showShareCards(aShareCards) {
-		console.log('aShareCards = ' + aShareCards);
-
 		var welCard1 = makeCardHTML(aShareCards[0])
 			, welCard2 = makeCardHTML(aShareCards[1]);
 
-		htElement['share_card_wrap'].append(welCard1)
-									.append(welCard2);
+		htElement['share_card_wrap'].html(welCard1)
+								.append(welCard2);
 	}
 
-	function showOpponentCard(nUserCard, nOpponentCard) {
-		console.log('userCard = ' + nUserCard);
-		console.log('opponentCards = ' + nOpponentCard);
+	function showOpponentCard(nOpponentCard) {
+		var welOpponentCard = makeCardHTML(nOpponentCard);
+
+		htElement['opponent_card_wrap'].html(welOpponentCard);
+	}
+
+	function showUserCard(nUserCard) {
+		var welCard = (typeof nUserCard === 'undefined') ?
+			makeCardHTML(''. true) : makeCardHTML(nUserCard);
+
+		htElement['user_card_wrap'].html(welCard);
 	}
 
 	function makeCardHTML(nNum, bIsBack) {
@@ -204,6 +218,12 @@ indian.che.ui = (function() {
 				break;
 			case 'game_ready' :
 				sMsg = '<strong>' + htOption.sUserName + '</strong> 님 준비';
+				break;
+			case 'game_show_share_cards' :
+				sMsg = '공유카드는 ' + htOption.aShareCards[0] + ', ' + htOption.aShareCards[1] + '입니다';
+				break;
+			case 'game_show_opponent_card' :
+				sMsg = '상대방 카드는 ' + htOption.nOpponentCard + '입니다';
 				break;
 		}
 		
@@ -238,6 +258,7 @@ indian.che.ui = (function() {
 		, inputMsg : inputMsg
 		, processGameReady : processGameReady
 		, processGameStart : processGameStart
+		, processGameInit : processGameInit
 	}
 
 })();

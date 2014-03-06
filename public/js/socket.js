@@ -69,8 +69,11 @@ indian.che.socket =(function() {
 	}
 
 	function processGameInit(htData) {
-		console.log(htData);
-		// !!!!!!!!!!!!!!!!!!!!!!!!!!!
+		Ui.processGameInit(htData);
+
+		oSocket.emit('game_init_ok', {
+			sUserName : Ui.getData('username')
+		});
 	}
 
 	return {
