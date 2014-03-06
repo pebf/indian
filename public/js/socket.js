@@ -17,6 +17,8 @@ indian.che.socket =(function() {
 		oSocket.on('game_ready_ok', processGameReadyOk);
 		oSocket.on('game_start', sendGameStart);
 		oSocket.on('game_init', processGameInit);
+		oSocket.on('game_bet', processGameBet);
+		oSocket.on('game_opponent_bet', processGameOpponentBet);
 	}
 
 	function sendJoin() {
@@ -73,6 +75,36 @@ indian.che.socket =(function() {
 
 		oSocket.emit('game_init_ok', {
 			sUserName : Ui.getData('username')
+			, sRoomId : Ui.getData('room')['sRoomId']
+		});
+	}
+
+	function processGameOpponentBet() {
+		Ui.showGameLog('game_opponent_bet');
+	}
+
+	function processGameBet(htData) {
+		Ui.processGameBet(htData.bIsFirstBet);
+	}
+
+	function sendGameBetGold(nGold) {
+		oSocket.emit('game_bet_gold', {
+			sUserName : Ui.getData('username')
+			, sRoomId : Ui.getData('room')['sRoomId']
+			, nBetGold : nGold
+		});
+	}
+
+	function sendGameStand() {
+		oSocket.emit('game_stand', {
+			sUserName : Ui.getData('username')
+			, sRoomId : Ui.getData('room')['sRoomId']
+		});
+	}
+
+	function sendGameGiveUp() {
+		oSocket.emit('game_give_up', {
+			sRoomId : Ui.getData('room')['sRoomId']
 		});
 	}
 
@@ -80,5 +112,8 @@ indian.che.socket =(function() {
 		init : init
 		, sendMsg : sendMsg
 		, sendGameReady : sendGameReady
+		, sendGameBet : sendGameBet
+		, sendGameStand : sendGameStand
+		, sendGameGiveUp : sendGameGiveUp
 	}
 }());

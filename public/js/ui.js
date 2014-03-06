@@ -18,7 +18,8 @@ indian.che.ui = (function() {
 	}
 
 	function initVar() {
-		htData['username'] = ghtInitData.sUserName;
+		htData['username'] = ghtInitData.htUser.sUserName;
+		htData['usergold'] = ghtInitData.htUser.sUserGold;
 		htData['room'] = ghtInitData.htRoom;
 	}
 
@@ -27,9 +28,9 @@ indian.che.ui = (function() {
 	}
 
 	function assignHTML() {
-		htElement['header'] = $(document.body).find('> ._header');
+		htElement['header'] = $('body > ._header');
 
-		htElement['game'] = $(document.body).find('> ._game');
+		htElement['game'] = $('body > ._game');
 		htElement['game_ct'] = htElement['game'].find('> ._game_ct');
 
 		htElement['user_area'] = htElement['game_ct'].find('> ._user_area');
@@ -52,6 +53,9 @@ indian.che.ui = (function() {
 		htElement['msg_area'] = $(document.body).find('> ._msg_area');
 		htElement['game_log'] = htElement['msg_area'].find('._game_log_content');
 		htElement['chat_box'] = htElement['msg_area'].find('._chat_content');
+
+		htElement['bet_layer'] = $('body > ._bet_layer');
+		htElement['bet_gold_layer'] = $('body > ._bet_gold_layer');
 	}
 
 	function attachEvent() {
@@ -67,6 +71,14 @@ indian.che.ui = (function() {
 
 		} else if (welTarget.hasClass('_ready_btn')) {
 			readyForGame(welTarget);
+			we.preventDefault();
+
+		} else if (welTarget.hasClass('_bet_btn')) {
+			clickBetBtn(welTarget);
+			we.preventDefault();
+
+		} else if (welTarget.hasClass('_bet_gold_btn')) {
+			clickBetGoldBtn(welTarget);
 			we.preventDefault();
 		}
 	}
@@ -131,6 +143,10 @@ indian.che.ui = (function() {
 
 		showOpponentCard(htData.nOpponentCard);
 		showGameLog('game_show_opponent_card', {nOpponentCard : htData.nOpponentCard});
+	}
+
+	function processGameBet(bIsFirstBet) {
+		showBetLayer(bIsFirstBet);
 	}
 
 	function hideReadyBtn(welBtn) {
@@ -225,6 +241,9 @@ indian.che.ui = (function() {
 			case 'game_show_opponent_card' :
 				sMsg = '상대방 카드는 ' + htOption.nOpponentCard + '입니다';
 				break;
+			case 'game_opponent_bet' :
+				sMsg = '상대방 배팅 중 입니다';
+				break;
 		}
 		
 		htElement['game_log'].append('<p>' + sMsg + '</p>');
@@ -238,19 +257,62 @@ indian.che.ui = (function() {
 		elChatBox.scrollTop = elChatBox.scrollHeight;
 	}
 
-	function showChooseLayer() {
-		var elChooseLayer = $('body > ._choose_layer')
-			, nLeft = ($(document).width() - elChooseLayer.width()) / 2;
+	function showBetLayer(bIsFirstBet) {
+		var welBetLayer = htElement['bet_layer']
+			, nLeft = ($(document).width() - welBetLayer.width()) / 2;
+
+		if (bIsFirstBet) {
+			welBetLayer.find('> ._stand').hide();
+			welBetLayer.find('> ._give_up').hide();
+		}
 		
-		elChooseLayer.css('left', nLeft);
-		elChooseLayer.show();
+		welBetLayer.css('left', nLeft)
+				.show();
+	}
+
+	function clickBetBtn(welTarget) {
+		if (welTarget.hasClass('_bet') {
+			htElement['bet_layer'].hide();
+			htElement['bet_gold_layer'].show();
+
+		} else if (welTarget.hasClass('_stand') {
+			Socket.sendGameStand();
+
+		} else if (welTarget.hasClass('_give_up') {
+			Socket.sendGameGiveUp();
+		}
+	}
+
+	function clickBetGoldBtn(welTarget) {
+		if (welTarget.hasClass('_ok')) {
+			betGold(welTarget);
+
+		} else if (welTarget.hasClass('_cancel')) {
+
+		}
+	}
+
+	function betGold(welTarget) {
+		var nGold = welTarget.prev().val() - 0
+			, nUserGold = getData('usergold');
+
+		if (!nGold) {
+			alert('배팅할 금액을 입력해주세요');
+			return;
+
+		} else if (nGold > nUserGold) {
+			alert('가지고 있는 골드를 초과하여 배팅할 수 없습니다');
+			return;
+		}
+
+		Socket.sendGameBetGold(nGold);			
 	}
 
 	return {
 		initialize : initialize
 		, showShareCards : showShareCards
 		, showOpponentCard : showOpponentCard
-		, showChooseLayer : showChooseLayer
+		, showBetLayer : showBetLayer
 		, showGameLog : showGameLog
 		, showOpponentInfo : showOpponentInfo
 		, showMsg : showMsg
@@ -259,6 +321,7 @@ indian.che.ui = (function() {
 		, processGameReady : processGameReady
 		, processGameStart : processGameStart
 		, processGameInit : processGameInit
+		, processGameBet : processGameBet
 	}
 
 })();

@@ -24,6 +24,7 @@ module.exports = function(app) {
 
 		socket.on('game_ready', processGameReady.bind(this, socket));
 		socket.on('game_start', processGameInit.bind(this, socket));
+		socket.on('game_init_ok', processGameBet.bind(this, socket));
 	}
 
 	function processJoin(socket, htData) {
@@ -85,6 +86,20 @@ module.exports = function(app) {
 		socket.emit('game_init', {
 			aShareCards : htGame.aShareCards
 			, nOpponentCard : nOpponentCard
+		});
+	}
+
+	function processGameBet(socket, htData) {
+		var htRoom = Master.getRoomById(htData.sRoomId)
+			, htGame = htRoom.htGame;
+
+		if (htGame.sUserHasTurn !== htData.sUserName) {
+			socket.emit('game_opponent_bet');
+			return;
+		}
+
+		socket.emit('game_bet', {
+			bIsFirstBet : (htGame.nTurn === 1)
 		});
 	}
 }

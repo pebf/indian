@@ -127,7 +127,9 @@ var Master = module.exports = {
 			, aShareCards : []
 			, sUserHasTurn : ''
 			, aCardInHands : []
-			, nBetMoney : 0
+			, nBetGold : 0
+			, nPrevBetGold : 0
+			, nTurn : 1
 		}
 	}
 
