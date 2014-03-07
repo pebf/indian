@@ -25,6 +25,7 @@ module.exports = function(app) {
 		socket.on('game_ready', processGameReady.bind(this, socket));
 		socket.on('game_start', processGameInit.bind(this, socket));
 		socket.on('game_init_ok', processGameBet.bind(this, socket));
+		socket.on('game_bet_gold', processGameBetGold.bind(this, socket));
 	}
 
 	function processJoin(socket, htData) {
@@ -93,7 +94,7 @@ module.exports = function(app) {
 		var htRoom = Master.getRoomById(htData.sRoomId)
 			, htGame = htRoom.htGame;
 
-		if (htGame.sUserHasTurn !== htData.sUserName) {
+		if (htGame.sUserInTurn !== htData.sUserName) {
 			socket.emit('game_opponent_bet');
 			return;
 		}
@@ -101,5 +102,26 @@ module.exports = function(app) {
 		socket.emit('game_bet', {
 			bIsFirstBet : (htGame.nTurn === 1)
 		});
+	}
+
+	function processGameBetGold(socket, htData) {
+		var htRoom = Master.getRoomById(htData.sRoomId)
+			, htGame = htRoom.htGame
+			, htUserInTurn = Mastet.getUserByName(htGame.sUserInTurn)
+			, nBetGold = htData.nBetGold;
+
+		htGame.nBetGold += nBetGold;
+		htUser.nGold -= nBetGold;
+
+		sokcet.emit('game_bet_gold_ok', {
+			htUser : htUser
+			, nBetGold : htGame.nBetGold
+		});
+
+		processGameSwitchTurn(sokcet);
+	}
+
+	function processGameSwitchTurn(socket, htRoom) {
+		
 	}
 }

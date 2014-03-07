@@ -1,7 +1,7 @@
 var Master = module.exports = {
 	n_START_GOLD : 30
 	, aUsers : []
-	, aRooms : []	
+	, aRooms : []
 	, nRoomIndexCnt : 0
 	, hasUser : function(sName) {
 		var aUsers = this.aUsers.filter(function(htUser) {
@@ -125,7 +125,7 @@ var Master = module.exports = {
 		return {
 			aDeck : this.getNewDeck()
 			, aShareCards : []
-			, sUserHasTurn : ''
+			, sUserInTurn : ''
 			, aCardInHands : []
 			, nBetGold : 0
 			, nPrevBetGold : 0
@@ -171,7 +171,7 @@ var Master = module.exports = {
 		var aNames = this.getUserNameFromMember(htRoom)
 			, htGame = htRoom.htGame;
 
-		htGame.sUserHasTurn = aNames[0];
+		htGame.sUserInTurn = aNames[0];
 
 		for (var i = 0, nLength = aNames.length; i < nLength; i++) {
 			htGame.aCardInHands.push({sName : aNames[i]

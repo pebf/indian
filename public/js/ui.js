@@ -42,13 +42,16 @@ indian.che.ui = (function() {
 		htElement['opponent_card_wrap'] = htElement['opponent_hand'].find('> ._card_wrap');
 		htElement['opponent_info'] = htElement['opponent_area'].find('> ._player_info');
 
-		htElement['board'] = htElement['game'].find('> .game_ct > ._middle_area > ._board');
-		htElement['board_top'] = htElement['board'].find('._top_area');
-		htElement['share_card_wrap'] = htElement['board_top'].find('._card_wrap');
+		htElement['middle_area'] = htElement['game'].find('> .game_ct > ._middle_area');
+		htElement['board'] = htElement['middle_area'].find('> div._board');
+		htElement['board_top'] = htElement['board'].find('> div._top_area');
+		htElement['share_card_wrap'] = htElement['board_top'].find('div._card_wrap');
 
-		htElement['board_btm'] = htElement['board'].find('._btm_area');
-		htElement['deck_card_wrap'] = htElement['board_btm'].find('._card_wrap');
-		htElement['board_card_wrap'] = htElement['board'].find('._card_wrap');
+		htElement['board_btm'] = htElement['board'].find('> div._btm_area');
+		htElement['deck_card_wrap'] = htElement['board_btm'].find('div._card_wrap');
+		htElement['board_card_wrap'] = htElement['board'].find('div._card_wrap');
+		htElement['bet_gold'] = htElement['board'].find('> div._bet_box ._bet_gold');
+
 
 		htElement['msg_area'] = $(document.body).find('> ._msg_area');
 		htElement['game_log'] = htElement['msg_area'].find('._game_log_content');
@@ -147,6 +150,24 @@ indian.che.ui = (function() {
 
 	function processGameBet(bIsFirstBet) {
 		showBetLayer(bIsFirstBet);
+	}
+
+	function processGameBetGoldOk(htData) {
+		updateUserInfo(htData.htUser);
+		updateBetGold(htData.nBetGold);
+	}
+
+	function updateUserInfo(htUser) {
+		var bIsUser = htUser.sName === getData('username')
+			, welInfo = bIsUser ? htElement['user_info'] : htElement['opponent_info'];
+
+		if (htUser.nGold) {
+			welInfo.find('span._gold').html(htUser.nGold);
+		}
+	}
+
+	function updateBetGold(nBetGold) {
+		htElement['bet_gold'].html(nBetGold);
 	}
 
 	function hideReadyBtn(welBtn) {
@@ -271,14 +292,14 @@ indian.che.ui = (function() {
 	}
 
 	function clickBetBtn(welTarget) {
-		if (welTarget.hasClass('_bet') {
+		if (welTarget.hasClass('_bet')) {
 			htElement['bet_layer'].hide();
 			htElement['bet_gold_layer'].show();
 
-		} else if (welTarget.hasClass('_stand') {
+		} else if (welTarget.hasClass('_stand')) {
 			Socket.sendGameStand();
 
-		} else if (welTarget.hasClass('_give_up') {
+		} else if (welTarget.hasClass('_give_up')) {
 			Socket.sendGameGiveUp();
 		}
 	}
@@ -288,7 +309,7 @@ indian.che.ui = (function() {
 			betGold(welTarget);
 
 		} else if (welTarget.hasClass('_cancel')) {
-
+			
 		}
 	}
 
@@ -322,6 +343,7 @@ indian.che.ui = (function() {
 		, processGameStart : processGameStart
 		, processGameInit : processGameInit
 		, processGameBet : processGameBet
+		, processGameBetGoldOk : processGameBetGoldOk
 	}
 
 })();
