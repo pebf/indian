@@ -107,18 +107,18 @@ module.exports = function(app) {
 	function processGameBetGold(socket, htData) {
 		var htRoom = Master.getRoomById(htData.sRoomId)
 			, htGame = htRoom.htGame
-			, htUserInTurn = Mastet.getUserByName(htGame.sUserInTurn)
+			, htUserInTurn = Master.getUserByName(htGame.sUserInTurn)
 			, nBetGold = htData.nBetGold;
 
 		htGame.nBetGold += nBetGold;
-		htUser.nGold -= nBetGold;
+		htUserInTurn.nGold -= nBetGold;
 
-		sokcet.emit('game_bet_gold_ok', {
-			htUser : htUser
+		socket.emit('game_bet_gold_ok', {
+			htUser : htUserInTurn
 			, nBetGold : htGame.nBetGold
 		});
 
-		processGameSwitchTurn(sokcet);
+		processGameSwitchTurn(socket, htRoom);
 	}
 
 	function processGameSwitchTurn(socket, htRoom) {

@@ -118,7 +118,7 @@ copy}
 .choose_text p{margin-top: 26px;font-size: 14px;font-weight: 700;}
 .choose_input_area{margin-top: 14px;}
 .choose_btn{width:60px;height:30px;margin:0 4px;}
-.choose_input{height:28px;font-size: 14px;}
+.choose_input{height:30px;font-size: 14px;text-align: right;margin-right:2px;}
 
 
 /* waitingroom */

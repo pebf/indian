@@ -50,8 +50,7 @@ indian.che.ui = (function() {
 		htElement['board_btm'] = htElement['board'].find('> div._btm_area');
 		htElement['deck_card_wrap'] = htElement['board_btm'].find('div._card_wrap');
 		htElement['board_card_wrap'] = htElement['board'].find('div._card_wrap');
-		htElement['bet_gold'] = htElement['board'].find('> div._bet_box ._bet_gold');
-
+		htElement['bet_gold'] = htElement['middle_area'].find('> div._bet_box > p._bet_gold');
 
 		htElement['msg_area'] = $(document.body).find('> ._msg_area');
 		htElement['game_log'] = htElement['msg_area'].find('._game_log_content');
@@ -279,6 +278,8 @@ indian.che.ui = (function() {
 	}
 
 	function showBetLayer(bIsFirstBet) {
+		htElement['bet_gold_layer'].hide();
+
 		var welBetLayer = htElement['bet_layer']
 			, nLeft = ($(document).width() - welBetLayer.width()) / 2;
 
@@ -291,10 +292,17 @@ indian.che.ui = (function() {
 				.show();
 	}
 
+	function showBetGoldLayer() {
+		htElement['bet_layer'].hide();
+
+		var nLeft = ($(document).width() - htElement['bet_gold_layer'].width()) / 2;
+		htElement['bet_gold_layer'].css('left', nLeft)
+								.show();
+	}
+
 	function clickBetBtn(welTarget) {
 		if (welTarget.hasClass('_bet')) {
-			htElement['bet_layer'].hide();
-			htElement['bet_gold_layer'].show();
+			showBetGoldLayer();			
 
 		} else if (welTarget.hasClass('_stand')) {
 			Socket.sendGameStand();
@@ -305,11 +313,11 @@ indian.che.ui = (function() {
 	}
 
 	function clickBetGoldBtn(welTarget) {
-		if (welTarget.hasClass('_ok')) {
-			betGold(welTarget);
+		if (welTarget.hasClass('_bet_gold')) {
+			betGold(welTarget);			
 
 		} else if (welTarget.hasClass('_cancel')) {
-			
+			showBetLayer();
 		}
 	}
 
@@ -318,7 +326,7 @@ indian.che.ui = (function() {
 			, nUserGold = getData('usergold');
 
 		if (!nGold) {
-			alert('배팅할 금액을 입력해주세요');
+			alert('배팅할 금액을 정확히 입력해주세요');
 			return;
 
 		} else if (nGold > nUserGold) {
@@ -326,7 +334,8 @@ indian.che.ui = (function() {
 			return;
 		}
 
-		Socket.sendGameBetGold(nGold);			
+		Socket.sendGameBetGold(nGold);
+		htElement['bet_gold_layer'].hide();
 	}
 
 	return {
