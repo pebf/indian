@@ -227,30 +227,15 @@ var Master = module.exports = {
 	, processGameJudge : function (htRoom) {
 		var htGame = htRoom.htGame
 			, aUserLastCards = this.makeUserLastCard(htRoom)
-			, aResult = ;
+			, aResultSet = this.calcurateCard(aUserLastCards)
+			, htWinnerInfo;
 
+		htWinnerInfo = this.judgeBy('triple', aResultSet) ||
+						this.judgeBy('straight', aResultSet) ||
+						this.judgeBy('pair', aResultSet) ||
+						this.judgeBy('larger_num');
 
-		var htResult;
-
-		result = this.getResultIs('triple', aUserLastCards);
-
-		if (result) {
-			return result;
-		}
-
-		result = this.getResultIs('straight', aUserLastCards);
-
-		if (result) {
-			return result;
-		}
-
-		result = this.getResultIs('pair', aUserLastCards);
-
-		if (result) {
-			return result;
-		}
-
-		return getResultByNum(htRoom);
+		return htWinnerInfo;
 	}
 
 	, makeUserLastCard : function (htGame) {
@@ -294,11 +279,7 @@ var Master = module.exports = {
 				}
 			}
 		}
-	}
-
-	, getResultIs : function (sWinType, aUserLastCards) {
-		var aResultSet = this.calcurateCard(aUserLastCards);
-	}
+	}	
 
 	, calcurateCard : function(aUserLastCards) {
 		var aResultSet = [];
@@ -321,6 +302,8 @@ var Master = module.exports = {
 
 			aResultSet.push(htTempResult);
 		});
+
+		return aResultSet;
 	}
 
 	, checkHasSameCard : function(htLastCards) {
@@ -354,5 +337,33 @@ var Master = module.exports = {
 			return {sType : 'straight'
 					, nCard : Math.max(aCards[0], aCards[1], aCards[2])};
 		}
+	}
+
+	, judgeBy : function(sType, aResultSet) {
+		var htResult1 = aResultSet[0]
+			, htResult2 = aResultSet[1]
+			, bUser1HasType = htResult1.sType === sType
+			, bUser2HasType = htResult2.sType === sType;
+
+		if (bUser1HasType && !bUser2HasType) {
+			return  htResult1;
+
+		} else if (!bUser1HasType && bUser2HasType) {
+			return  htResult2;
+
+		} else if (bUser1HasType && bUser2HasType) {
+			if (htResult1.nCard > htResult2.nCard ) {
+				return htResult1;
+
+			} else if (htResult1.nCard < htResult2.nCard ) {
+				return htResult2;
+
+			} else {
+				return {sType : 'draw'};
+			}
+
+		}
+
+		return null;
 	}
 }
