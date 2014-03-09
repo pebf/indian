@@ -159,24 +159,45 @@ indian.che.ui = (function() {
 	}
 
 	function processGameBetGoldOk(htData) {
-		var bIsUser = htUser.sName === getData('username');
+		console.log('game_bet_gold_ok');
+		console.log(htData);
+		var bIsUser = htData.htUser.sName === getData('username');
 
-		updateUserInfo(htData.htUser, bIsUser);
+		updateUserGold(htData.htUser.nGold, bIsUser);
 		updateBetGold(htData.nBetGold);
 
 		showGameLog(bIsUser ? 'game_user_bet_gold_ok' : 'game_opponent_bet_gold_ok'
 				, {nBetGold : htData.nBetGold});
 	}
 
-	function updateUserInfo(htUser, bIsUser) {
-		var welInfo = bIsUser ? htElement['user_info'] : htElement['opponent_info']
-			, nGold = htUser.nGold;
+	function processGameStandOk(htData) {
+		updateUserGold(htData.nUserGold, true);
+		updateBetGold(htData.nBetGold);
+
+		showGameLog('game_stand_ok');
+		htElement['bet_layer'].hide();
+	}
+
+	function processGameOpponentStandOk(htData) {
+		updateUserGold(htData.nUserGold);
+		updateBetGold(htData.nBetGold);
+		showGameLog('game_opponent_stand_ok');
+	}
+
+	function updateUserGold(nGold, bIsUser) {
+		var welInfo;
+
+		if (bIsUser)	 {
+			welInfo = htElement['user_info'];
+			setData('usergold', nGold);
+			
+		} else {
+			welInfo = htElement['opponent_info'];
+		}
 
 		if (nGold) {
 			welInfo.find('span._gold').html(nGold);
 		}
-
-		setData('usergold', nGold);
 	}
 
 	function updateBetGold(nBetGold) {
@@ -255,7 +276,7 @@ indian.che.ui = (function() {
 
 	function showGameLog(sCode, htOption) {
 		var sMsg
-			, welGameLog;
+			, welGameLog = htElement['game_log'];
 
 		switch (sCode) {
 			case 'game_start' :
@@ -283,10 +304,16 @@ indian.che.ui = (function() {
 				sMsg = '<strong>' + htOption.sUserName + '</strong> 님의 차례입니다';
 				break;
 			case 'game_user_bet_gold_ok' :
-				sMsg = '<strong>' = htOption.nBetGold + '</strong> 골드를 배팅했습니다.';
+				sMsg = '<strong>' + htOption.nBetGold + '</strong> 골드를 배팅했습니다.';
 				break;
 			case 'game_opponent_bet_gold_ok' :
-				sMsg = '상대방이 <strong>' = htOption.nBetGold + '</strong> 골드를 배팅했습니다.';
+				sMsg = '상대방이 <strong>' + htOption.nBetGold + '</strong> 골드를 배팅했습니다.';
+				break;
+			case 'game_stand_ok' :
+				sMsg = '스탠드했습니다.';
+				break;
+			case 'game_opponent_stand_ok' :
+				sMsg = '상대방이 스탠드했습니다.';
 				break;
 		}
 		
@@ -378,6 +405,8 @@ indian.che.ui = (function() {
 		, processGameInit : processGameInit
 		, processGameBet : processGameBet
 		, processGameBetGoldOk : processGameBetGoldOk
+		, processGameStandOk : processGameStandOk
+		, processGameOpponentStandOk : processGameOpponentStandOk
 	}
 
 })();
