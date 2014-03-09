@@ -125,7 +125,7 @@ var Master = module.exports = {
 		return {
 			aDeck : this.getNewDeck()
 			, aShareCards : []
-			, sUserInTurn : ''
+			, sUserInTurn : []
 			, aCardInHands : []
 			, nBetGold : 0
 			, nPrevBetGold : 0
@@ -210,6 +210,149 @@ var Master = module.exports = {
 			if (htCardInfo.sName !== sUserName) {
 				return htCardInfo.nCard;
 			}
+		}
+	}
+
+	, switchTurn : function (htRoom) {
+		var htGame = htRoom.htGame
+			, aNames = this.getUserNameFromMember(htRoom);
+
+		htGame.nTurn += 1;
+
+		htGame.sUserInTurn = aNames.filter(function (sUserName) {
+			return (sUserName !== htGame.sUserInTurn);
+		})[0];
+	}
+
+	, processGameJudge : function (htRoom) {
+		var htGame = htRoom.htGame
+			, aUserLastCards = this.makeUserLastCard(htRoom)
+			, aResult = ;
+
+
+		var htResult;
+
+		result = this.getResultIs('triple', aUserLastCards);
+
+		if (result) {
+			return result;
+		}
+
+		result = this.getResultIs('straight', aUserLastCards);
+
+		if (result) {
+			return result;
+		}
+
+		result = this.getResultIs('pair', aUserLastCards);
+
+		if (result) {
+			return result;
+		}
+
+		return getResultByNum(htRoom);
+	}
+
+	, makeUserLastCard : function (htGame) {
+		var aUserLastCards = this.getUserLastCards(htGame);
+		this.sortCards(aUserLastCards.aCards);
+
+		return aUserLastCards;
+	}
+
+	, getUserLastCards : function (htGame) {
+		var aCardInHands = htGame.aCardInHands
+			, aShareCards = htGame.aShareCards
+			, aUserLastCards = []
+			, htCardInHands;
+
+		for (var i = 0, nLength = aCardInHands.length; i < nLength; i++) {
+			htCardInHands = aCardInHands[i];
+
+			aUserLastCards.push({
+				sName : htCardInHands.sName
+				, aCards : [aShareCards[0], aShareCards[1], htCardInHands.card]
+			})
+		}
+
+		return aUserLastCards;
+	}
+
+	, sortCards : function (aUserCards) {
+		var aCards, nTemp;
+
+		for (var i = 0, nLength = aUserCards.length; i < nLength; i++) {
+			aCards = aUserCards[i];
+
+			for (var j = 0, nCardsLength =  aCards.length; j < nCardLength; j++) {
+				for (var k = j + 1; k < nCardLength; k++) {
+					if (aCards[j] > aCards[k]) {
+						nTemp = aCards[j];
+						aCards[j] = aCards[k];
+						aCards[k] = nTemp;
+					}
+				}
+			}
+		}
+	}
+
+	, getResultIs : function (sWinType, aUserLastCards) {
+		var aResultSet = this.calcurateCard(aUserLastCards);
+	}
+
+	, calcurateCard : function(aUserLastCards) {
+		var aResultSet = [];
+
+		aUserLastCards.each(function(htLastCards) {
+			var htResult = { sName : htLastCards.sName }
+				, htSameCardResult
+				, htTempResult;
+			
+			htTempResult = this.checkHasSameCard(htLastCards);
+
+			if (!htTempResult) {
+				htTempResult = this.checkHasStaright(htLastCards);	
+			}			
+
+			if (htTempResult) {
+				htResult.sType = htTempResult.sType;
+				htResult.nCard = htTempResult.nCard;
+			}
+
+			aResultSet.push(htTempResult);
+		});
+	}
+
+	, checkHasSameCard : function(htLastCards) {
+		var aCards = htLastCards.aCards
+			, nCardNum = aCards.length
+			, nSameCardNum = 1;
+
+		for (var i = 0; i < nCardNum - 1; i++) {
+			if (aCards[i] === aCards[i + 1]) {
+				nSameCardNum += 1;
+
+			} else {
+				if (nSameNumCard === 3) {
+					return {sType : 'triple', nCard : aCards[i]};
+
+				} else if (nSameNumCard === 2) {
+					return {sType : 'pair', nCard : aCards[i]};
+				}
+
+				nSameNumCard = 1;
+			}
+		}
+	}
+
+	, checkHasStaright : function(htLastCards) {
+		var nStraightNum = 3
+			, aCards = htLastCard.aCards;
+
+		if (aCards[0] + 1 % 10 === aCards[1] % 10
+			&& aCards[1] + 1 % 10 === aCards[2] % 10) {
+			return {sType : 'straight'
+					, nCard : Math.max(aCards[0], aCards[1], aCards[2])};
 		}
 	}
 }

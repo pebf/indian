@@ -1,7 +1,7 @@
 indian.che.ui = (function() {
 	var Socket
 		, htElement = {}		
-		, htData = {};
+		, htData = {};		
 
 	function initialize () {
 		Socket = indian.che.socket;
@@ -25,6 +25,12 @@ indian.che.ui = (function() {
 
 	function getData(sKey) {
 		return htData[sKey];
+	}
+
+	function setData(sKey, oValue) {
+		if (typeof oValue !== 'undefined') {
+			htData[sKey] = oValue;
+		}
 	}
 
 	function assignHTML() {
@@ -149,20 +155,28 @@ indian.che.ui = (function() {
 
 	function processGameBet(bIsFirstBet) {
 		showBetLayer(bIsFirstBet);
+		showGameLog('game_user_bet', {sUserName : getData('username')});
 	}
 
 	function processGameBetGoldOk(htData) {
-		updateUserInfo(htData.htUser);
+		var bIsUser = htUser.sName === getData('username');
+
+		updateUserInfo(htData.htUser, bIsUser);
 		updateBetGold(htData.nBetGold);
+
+		showGameLog(bIsUser ? 'game_user_bet_gold_ok' : 'game_opponent_bet_gold_ok'
+				, {nBetGold : htData.nBetGold});
 	}
 
-	function updateUserInfo(htUser) {
-		var bIsUser = htUser.sName === getData('username')
-			, welInfo = bIsUser ? htElement['user_info'] : htElement['opponent_info'];
+	function updateUserInfo(htUser, bIsUser) {
+		var welInfo = bIsUser ? htElement['user_info'] : htElement['opponent_info']
+			, nGold = htUser.nGold;
 
-		if (htUser.nGold) {
-			welInfo.find('span._gold').html(htUser.nGold);
+		if (nGold) {
+			welInfo.find('span._gold').html(nGold);
 		}
+
+		setData('usergold', nGold);
 	}
 
 	function updateBetGold(nBetGold) {
@@ -240,7 +254,8 @@ indian.che.ui = (function() {
 	}
 
 	function showGameLog(sCode, htOption) {
-		var sMsg;
+		var sMsg
+			, welGameLog;
 
 		switch (sCode) {
 			case 'game_start' :
@@ -262,11 +277,21 @@ indian.che.ui = (function() {
 				sMsg = '상대방 카드는 ' + htOption.nOpponentCard + '입니다';
 				break;
 			case 'game_opponent_bet' :
-				sMsg = '상대방 배팅 중 입니다';
+				sMsg = '상대방이 선택 중 입니다';
+				break;
+			case 'game_user_bet' :
+				sMsg = '<strong>' + htOption.sUserName + '</strong> 님의 차례입니다';
+				break;
+			case 'game_user_bet_gold_ok' :
+				sMsg = '<strong>' = htOption.nBetGold + '</strong> 골드를 배팅했습니다.';
+				break;
+			case 'game_opponent_bet_gold_ok' :
+				sMsg = '상대방이 <strong>' = htOption.nBetGold + '</strong> 골드를 배팅했습니다.';
 				break;
 		}
 		
-		htElement['game_log'].append('<p>' + sMsg + '</p>');
+		welGameLog.append('<p>' + sMsg + '</p>');
+		welGameLog[0].scrollTop = welGameLog[0].scrollHeight;
 	}
 
 	function showMsg(htData) {

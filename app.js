@@ -8,8 +8,7 @@ var express = require('express')
 	, user = require('./routes/user')
 	, http = require('http')
 	, path = require('path')
-	, Master = require('./master')
-	//, Chat = require('./chat');
+	, Master = require('./master');	
 
 var app = express();
 
