@@ -159,7 +159,7 @@ indian.che.ui = (function() {
 	}
 
 	function processGameBetGoldOk(htData) {
-		var bIsUser = htUser.sName === getData('username');
+		var bIsUser = htData.htUser.sName === getData('username');
 
 		updateUserInfo(htData.htUser, bIsUser);
 		updateBetGold(htData.nBetGold);
@@ -255,7 +255,7 @@ indian.che.ui = (function() {
 
 	function showGameLog(sCode, htOption) {
 		var sMsg
-			, welGameLog;
+			, welGameLog = htElement['game_log'];
 
 		switch (sCode) {
 			case 'game_start' :
@@ -283,10 +283,10 @@ indian.che.ui = (function() {
 				sMsg = '<strong>' + htOption.sUserName + '</strong> 님의 차례입니다';
 				break;
 			case 'game_user_bet_gold_ok' :
-				sMsg = '<strong>' = htOption.nBetGold + '</strong> 골드를 배팅했습니다.';
+				sMsg = '<strong>' + htOption.nBetGold + '</strong> 골드를 배팅했습니다.';
 				break;
 			case 'game_opponent_bet_gold_ok' :
-				sMsg = '상대방이 <strong>' = htOption.nBetGold + '</strong> 골드를 배팅했습니다.';
+				sMsg = '상대방이 <strong>' + htOption.nBetGold + '</strong> 골드를 배팅했습니다.';
 				break;
 		}
 		

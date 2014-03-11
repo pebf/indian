@@ -27,7 +27,7 @@ module.exports = function(app) {
 		socket.on('game_init_ok', processGameBet.bind(this, socket));
 		socket.on('game_bet_gold', processGameBetGold.bind(this, socket));
 		socket.on('game_stand', processGameStand.bind(this, socket));
-		socket.on('game_give_up', processGiveUp.bind(this, socket));
+		socket.on('game_give_up', processGameGiveUp.bind(this, socket));
 	}
 
 	function processJoin(socket, htData) {
@@ -157,7 +157,14 @@ module.exports = function(app) {
 		processGameJudge(socket, htRoom);
 	}
 
+	function processGameGiveUp(socket, htData) {
+
+	}
+
 	function processGameJudge(socket, htRoom) {
 		var htResult = Master.getGameResult(htRoom);
+		console.log('**************************');
+		console.log(htResult);
+		console.log('**************************');
 	}
 }

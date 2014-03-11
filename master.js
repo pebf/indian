@@ -224,23 +224,25 @@ var Master = module.exports = {
 		})[0];
 	}
 
-	, processGameJudge : function (htRoom) {
+	, getGameResult : function (htRoom) {
 		var htGame = htRoom.htGame
-			, aUserLastCards = this.makeUserLastCard(htRoom)
+			, aUserLastCards = this.makeUserLastCard(htGame)
 			, aResultSet = this.calcurateCard(aUserLastCards)
 			, htWinnerInfo;
+
+		console.log(aResultSet);
 
 		htWinnerInfo = this.judgeBy('triple', aResultSet) ||
 						this.judgeBy('straight', aResultSet) ||
 						this.judgeBy('pair', aResultSet) ||
-						this.judgeBy('larger_num');
+						this.judgeBy('larger_num', aResultSet);
 
 		return htWinnerInfo;
 	}
 
 	, makeUserLastCard : function (htGame) {
 		var aUserLastCards = this.getUserLastCards(htGame);
-		this.sortCards(aUserLastCards.aCards);
+		this.sortCards(aUserLastCards);
 
 		return aUserLastCards;
 	}
@@ -256,7 +258,7 @@ var Master = module.exports = {
 
 			aUserLastCards.push({
 				sName : htCardInHands.sName
-				, aCards : [aShareCards[0], aShareCards[1], htCardInHands.card]
+				, aCards : [aShareCards[0], aShareCards[1], htCardInHands.nCard]
 			})
 		}
 
@@ -267,10 +269,10 @@ var Master = module.exports = {
 		var aCards, nTemp;
 
 		for (var i = 0, nLength = aUserCards.length; i < nLength; i++) {
-			aCards = aUserCards[i];
+			aCards = aUserCards[i].aCards;
 
-			for (var j = 0, nCardsLength =  aCards.length; j < nCardLength; j++) {
-				for (var k = j + 1; k < nCardLength; k++) {
+			for (var j = 0, nCardsLength =  aCards.length; j < nCardsLength; j++) {
+				for (var k = j + 1; k < nCardsLength; k++) {
 					if (aCards[j] > aCards[k]) {
 						nTemp = aCards[j];
 						aCards[j] = aCards[k];
@@ -282,17 +284,18 @@ var Master = module.exports = {
 	}	
 
 	, calcurateCard : function(aUserLastCards) {
-		var aResultSet = [];
+		var aResultSet = []
+			, that = this;
 
-		aUserLastCards.each(function(htLastCards) {
+		aUserLastCards.forEach(function(htLastCards) {
 			var htResult = { sName : htLastCards.sName }
 				, htSameCardResult
 				, htTempResult;
 			
-			htTempResult = this.checkHasSameCard(htLastCards);
+			htTempResult = that.checkHasSameCard(htLastCards);
 
 			if (!htTempResult) {
-				htTempResult = this.checkHasStaright(htLastCards);	
+				htTempResult = that.checkHasStaright(htLastCards);	
 			}			
 
 			if (htTempResult) {
@@ -300,7 +303,7 @@ var Master = module.exports = {
 				htResult.nCard = htTempResult.nCard;
 			}
 
-			aResultSet.push(htTempResult);
+			aResultSet.push(htResult);
 		});
 
 		return aResultSet;
@@ -316,21 +319,21 @@ var Master = module.exports = {
 				nSameCardNum += 1;
 
 			} else {
-				if (nSameNumCard === 3) {
+				if (nSameCardNum === 3) {
 					return {sType : 'triple', nCard : aCards[i]};
 
-				} else if (nSameNumCard === 2) {
+				} else if (nSameCardNum === 2) {
 					return {sType : 'pair', nCard : aCards[i]};
 				}
 
-				nSameNumCard = 1;
+				nSameCardNum = 1;
 			}
 		}
 	}
 
 	, checkHasStaright : function(htLastCards) {
 		var nStraightNum = 3
-			, aCards = htLastCard.aCards;
+			, aCards = htLastCards.aCards;
 
 		if (aCards[0] + 1 % 10 === aCards[1] % 10
 			&& aCards[1] + 1 % 10 === aCards[2] % 10) {
@@ -339,7 +342,9 @@ var Master = module.exports = {
 		}
 	}
 
-	, judgeBy : function(sType, aResultSet) {
+	, judgeBy : function(sType, aResultSet) {		
+		console.log(aResultSet);
+
 		var htResult1 = aResultSet[0]
 			, htResult2 = aResultSet[1]
 			, bUser1HasType = htResult1.sType === sType
