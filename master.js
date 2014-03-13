@@ -230,8 +230,6 @@ var Master = module.exports = {
 			, aResultSet = this.calcurateCard(aUserLastCards)
 			, htWinnerInfo;
 
-		console.log(aResultSet);
-
 		htWinnerInfo = this.judgeBy('triple', aResultSet) ||
 						this.judgeBy('straight', aResultSet) ||
 						this.judgeBy('pair', aResultSet) ||
@@ -342,9 +340,7 @@ var Master = module.exports = {
 		}
 	}
 
-	, judgeBy : function(sType, aResultSet) {		
-		console.log(aResultSet);
-
+	, judgeBy : function(sType, aResultSet) {
 		var htResult1 = aResultSet[0]
 			, htResult2 = aResultSet[1]
 			, bUser1HasType = htResult1.sType === sType
@@ -367,6 +363,10 @@ var Master = module.exports = {
 				return {sType : 'draw'};
 			}
 
+		}
+
+		if (sType === 'larger_num') {
+			// !!!!!!!!!!!! TODO
 		}
 
 		return null;

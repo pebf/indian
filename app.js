@@ -27,6 +27,13 @@ app.use(express.methodOverride());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Exception Handler - js 에러 시 서버가 죽는 현상 방지 
+process.on('uncaughtException', function(err) {
+	// TODO : err.stack 사용 필요
+	// http://nodeqa.com/nodejs_ref/5 참조
+	console.log('Caught Exception : ' + err); 
+});
+
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());

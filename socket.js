@@ -162,9 +162,17 @@ module.exports = function(app) {
 	}
 
 	function processGameJudge(socket, htRoom) {
-		var htResult = Master.getGameResult(htRoom);
-		console.log('**************************');
-		console.log(htResult);
-		console.log('**************************');
+		var htResult = Master.getGameResult(htRoom)
+			, sRoomId = htRoom.sRoomId;
+
+		console.log('********* htResult ***********');
+		
+		socket.emit('game_end', {
+			htResult : htResult
+		});
+
+		socket.broadcast.to(htRoom.sRoomId).emit('game_end', {
+			htResult : htResult
+		});		
 	}
 }
