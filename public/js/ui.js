@@ -181,15 +181,34 @@ indian.che.ui = (function() {
 					, { nBetGold : htData.nBetGold});
 	}
 
-	function updateUserInfo(htUser, bIsUser) {
-		var welInfo = bIsUser ? htElement['user_info'] : htElement['opponent_info']
-			, nGold = htUser.nGold;
+	function processGameStandOk(htData) {
+		updateUserGold(htData.nUserGold, true);
+		updateBetGold(htData.nBetGold);
+
+		showGameLog('game_stand_ok');
+		htElement['bet_layer'].hide();
+	}
+
+	function processGameOpponentStandOk(htData) {
+		updateUserGold(htData.nUserGold);
+		updateBetGold(htData.nBetGold);
+		showGameLog('game_opponent_stand_ok');
+	}
+
+	function updateUserGold(nGold, bIsUser) {
+		var welInfo;
+
+		if (bIsUser)	 {
+			welInfo = htElement['user_info'];
+			setData('usergold', nGold);
+			
+		} else {
+			welInfo = htElement['opponent_info'];
+		}
 
 		if (nGold) {
 			welInfo.find('span._gold').html(nGold);
 		}
-
-		setData('usergold', nGold);
 	}
 
 	function updateBetGold(nBetGold) {
@@ -397,6 +416,8 @@ indian.che.ui = (function() {
 		, processGameInit : processGameInit
 		, processGameBet : processGameBet
 		, processGameBetGoldOk : processGameBetGoldOk
+		, processGameStandOk : processGameStandOk
+		, processGameOpponentStandOk : processGameOpponentStandOk
 	}
 
 })();

@@ -235,14 +235,14 @@ var Master = module.exports = {
 						this.judgeBy('straight', aResultSet) ||
 						this.judgeBy('pair', aResultSet) ||
 						this.judgeBy('larger_num', aResultSet);
-
+						
 		console.log('********** htWinnerInfo ************');
 		console.log(htWinnerInfo);
 
 		return htWinnerInfo;
 	}
 
-	, makeUserLastCard : function (htGame) {
+	, makeUserLastCard : function (htGame) {		
 		var aUserLastCards = this.getUserLastCards(htGame);
 		this.sortCards(aUserLastCards);
 
@@ -268,8 +268,6 @@ var Master = module.exports = {
 	}
 
 	, sortCards : function (aUserCards) {
-		var aCards, nTemp;
-
 		for (var i = 0, nLength = aUserCards.length; i < nLength; i++) {
 			aCards = aUserCards[i].aCards;
 
@@ -283,7 +281,7 @@ var Master = module.exports = {
 				}
 			}
 		}
-	}	
+	}
 
 	, calcurateCard : function(aUserLastCards) {
 		var aResultSet = []
@@ -297,19 +295,27 @@ var Master = module.exports = {
 			htTempResult = that.checkHasSameCard(htLastCards);
 
 			if (!htTempResult) {
+<<<<<<< HEAD
 				htTempResult = that.checkHasStaright(htLastCards);	
 			}			
+=======
+				htTempResult = that.checkHasStaright(htLastCards);
+			}		
+>>>>>>> 4dbd9906d32694a293616170a751d4d17c50fd47
 
 			if (htTempResult) {
 				htResult.sType = htTempResult.sType;
 				htResult.nCard = htTempResult.nCard;
 			}
 
+<<<<<<< HEAD
 			if (!htTempResult) {
 				htResult.sType = 'larger_num'
 				htResult.nCard = htLastCards.aCards[2];
 			}
 
+=======
+>>>>>>> 4dbd9906d32694a293616170a751d4d17c50fd47
 			aResultSet.push(htResult);
 		});
 
