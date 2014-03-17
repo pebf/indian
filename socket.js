@@ -26,7 +26,7 @@ module.exports = function(app) {
 		socket.on('game_start', processGameInit.bind(this, socket));
 		socket.on('game_init_ok', processGameBet.bind(this, socket));
 		socket.on('game_bet_gold', processGameBetGold.bind(this, socket));
-		socket.on('game_stand', processGameStand.bind(this, socket));
+		socket.on('game_stand', processGameStand.bind(this, socket));		
 		socket.on('game_give_up', processGameGiveUp.bind(this, socket));
 	}
 
@@ -110,22 +110,25 @@ module.exports = function(app) {
 		var htRoom = Master.getRoomById(htData.sRoomId)
 			, htGame = htRoom.htGame
 			, htUserInTurn = Master.getUserByName(htGame.sUserInTurn)
-			, nBetGold = htData.nBetGold;
-
+			, nBetGold = htData.nBetGold
+			, nPrevBetGold = htGame.nPrevBetGold;
+			
 		htGame.nBetGold += nBetGold;
-		htGame.nPrevBetGold = nBetGold;
-		htUserInTurn.nGold -= nBetGold;
+		htUserInTurn.nGold -= (nBetGold + nPrevBetGold);
 
 		socket.emit('game_bet_gold_ok', {
 			htUser : htUserInTurn
-			, nBetGold : htGame.nBetGold
+			, nBetGold : nBetGold
+			, nPrevBetGold : nPrevBetGold
 		});
 
 		socket.broadcast.to(htRoom.sRoomId).emit('game_bet_gold_ok', {
 			htUser : htUserInTurn
-			, nBetGold : htGame.nBetGold
+			, nBetGold : nBetGold
+			, nPrevBetGold : nPrevBetGold
 		});
 
+		htGame.nPrevBetGold = nBetGold;
 		processGameSwitchTurn(socket, htRoom);
 	}
 
@@ -146,7 +149,7 @@ module.exports = function(app) {
 
 		socket.emit('game_stand_ok', {
 			htUser : htUserInTurn
-			, nBetGold : htGame.nPrevBetGold
+			, nBetGold : htGame.nPrevBetGold			
 		});
 
 		socket.broadcast.to(htRoom.sRoomId).emit('game_stand_ok', {

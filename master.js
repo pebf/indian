@@ -130,6 +130,7 @@ var Master = module.exports = {
 			, nBetGold : 0
 			, nPrevBetGold : 0
 			, nTurn : 1
+			, nGameDrawCnt : 0
 		}
 	}
 
@@ -235,6 +236,9 @@ var Master = module.exports = {
 						this.judgeBy('pair', aResultSet) ||
 						this.judgeBy('larger_num', aResultSet);
 
+		console.log('********** htWinnerInfo ************');
+		console.log(htWinnerInfo);
+
 		return htWinnerInfo;
 	}
 
@@ -301,6 +305,11 @@ var Master = module.exports = {
 				htResult.nCard = htTempResult.nCard;
 			}
 
+			if (!htTempResult) {
+				htResult.sType = 'larger_num'
+				htResult.nCard = htLastCards.aCards[2];
+			}
+
 			aResultSet.push(htResult);
 		});
 
@@ -344,7 +353,8 @@ var Master = module.exports = {
 		var htResult1 = aResultSet[0]
 			, htResult2 = aResultSet[1]
 			, bUser1HasType = htResult1.sType === sType
-			, bUser2HasType = htResult2.sType === sType;
+			, bUser2HasType = htResult2.sType === sType
+			, nCard1, nCard2;
 
 		if (bUser1HasType && !bUser2HasType) {
 			return  htResult1;
@@ -362,11 +372,6 @@ var Master = module.exports = {
 			} else {
 				return {sType : 'draw'};
 			}
-
-		}
-
-		if (sType === 'larger_num') {
-			// !!!!!!!!!!!! TODO
 		}
 
 		return null;

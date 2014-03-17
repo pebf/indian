@@ -162,10 +162,23 @@ indian.che.ui = (function() {
 		var bIsUser = htData.htUser.sName === getData('username');
 
 		updateUserInfo(htData.htUser, bIsUser);
-		updateBetGold(htData.nBetGold);
+		updateBetGold(htData.nBetGold + htData.nPrevBetGold);
 
 		showGameLog(bIsUser ? 'game_user_bet_gold_ok' : 'game_opponent_bet_gold_ok'
-				, {nBetGold : htData.nBetGold});
+					, {nBetGold : htData.nBetGold
+						, nPrevBetGold : htData.nPrevBetGold});
+	}
+
+	function processGameStandOk(htData) {
+		var bIsUser = htData.htUser.sName === getData('username');
+
+		updateUserInfo(htData.htUser, bIsUser);
+		updateBetGold(htData.nBetGold);
+
+		this.htElement['bet_layer'].hide();
+
+		showGameLog(bIsUser ? 'game_user_stand_ok' : 'game_opponent_stand_ok'
+					, { nBetGold : htData.nBetGold});
 	}
 
 	function updateUserInfo(htUser, bIsUser) {
@@ -283,10 +296,16 @@ indian.che.ui = (function() {
 				sMsg = '<strong>' + htOption.sUserName + '</strong> 님의 차례입니다';
 				break;
 			case 'game_user_bet_gold_ok' :
-				sMsg = '<strong>' + htOption.nBetGold + '</strong> 골드를 배팅했습니다.';
+				sMsg = '<strong>' + htOption.nPrevBetGold + '</strong>골드에 추가로 <strong>' + htOption.nBetGold + '</strong> 골드를 배팅했습니다.';
 				break;
 			case 'game_opponent_bet_gold_ok' :
-				sMsg = '상대방이 <strong>' + htOption.nBetGold + '</strong> 골드를 배팅했습니다.';
+				sMsg = '상대방이 <strong>' + htOption.nPrevBetGold + '</strong>골드에 추가로<strong>' + htOption.nBetGold + '</strong> 골드를 배팅했습니다.';
+				break;
+			case 'game_user_stand_ok' :
+				sMsg = '<strong>' + htOption.nBetGold + '</strong> 골드로 스탠드하였습니다.';
+				break;
+			case 'game_opponent_stand_ok' :
+				sMsg = '상대방이 <strong>' + htOption.nBetGold + '</strong> 골드로 스탠드하였습니다.';
 				break;
 		}
 		
