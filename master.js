@@ -130,7 +130,7 @@ var Master = module.exports = {
 			, nBetGold : 0
 			, nPrevBetGold : 0
 			, nTurn : 1
-			, nGameDrawCnt : 0
+			, nDrawCnt : 0
 		}
 	}
 
@@ -219,6 +219,12 @@ var Master = module.exports = {
 			, aNames = this.getUserNameFromMember(htRoom);
 
 		htGame.nTurn += 1;
+		this.switchUserInTurn(htRoom);
+	}
+
+	, switchUserInTurn : function (htRoom) {
+		var htGame = htRoom.htGame
+			, aNames = this.getUserNameFromMember(htRoom);
 
 		htGame.sUserInTurn = aNames.filter(function (sUserName) {
 			return (sUserName !== htGame.sUserInTurn);
@@ -235,9 +241,6 @@ var Master = module.exports = {
 						this.judgeBy('straight', aResultSet) ||
 						this.judgeBy('pair', aResultSet) ||
 						this.judgeBy('larger_num', aResultSet);
-						
-		console.log('********** htWinnerInfo ************');
-		console.log(htWinnerInfo);
 
 		return htWinnerInfo;
 	}
@@ -295,27 +298,20 @@ var Master = module.exports = {
 			htTempResult = that.checkHasSameCard(htLastCards);
 
 			if (!htTempResult) {
-<<<<<<< HEAD
 				htTempResult = that.checkHasStaright(htLastCards);	
 			}			
-=======
-				htTempResult = that.checkHasStaright(htLastCards);
-			}		
->>>>>>> 4dbd9906d32694a293616170a751d4d17c50fd47
+
 
 			if (htTempResult) {
 				htResult.sType = htTempResult.sType;
 				htResult.nCard = htTempResult.nCard;
 			}
 
-<<<<<<< HEAD
 			if (!htTempResult) {
 				htResult.sType = 'larger_num'
 				htResult.nCard = htLastCards.aCards[2];
 			}
 
-=======
->>>>>>> 4dbd9906d32694a293616170a751d4d17c50fd47
 			aResultSet.push(htResult);
 		});
 
@@ -381,5 +377,42 @@ var Master = module.exports = {
 		}
 
 		return null;
+	}
+
+	// {
+	// 		aDeck : this.getNewDeck()
+	// 		, aShareCards : []
+	// 		, sUserInTurn : []
+	// 		, aCardInHands : []
+	// 		, nBetGold : 0
+	// 		, nPrevBetGold : 0
+	// 		, nTurn : 1
+	// 		, nDrawCnt : 0
+	// 	}
+
+	, gameEnd : function(htRoom, htResult) {
+		var htGame = htRoom.htGame
+			, nBetGold = htGame.nBetGold
+			, sWinnerName = htGame.sName
+			, htWinner;
+
+		if (sWinnerName) {
+			htWinner = this.getUserByName(sWinnerName);
+			htWinner.nGold += nBetGold;
+			htGame.nDrawCnt = 0;
+
+			if (sWinnerName !== htGame.sUserInTurn)  {
+				this.switchUserInTurn(htRoom);
+			}
+
+		} else {
+			htGame.nDrawCnt +=1;
+		}
+
+		this.gameInit(htGame);
+	}
+
+	, gameInit : function(htGame) {
+		//////////// TODO!!!!!!!!!!
 	}
 }

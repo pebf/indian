@@ -21,11 +21,7 @@ indian.che.socket =(function() {
 		oSocket.on('game_opponent_bet', processGameOpponentBet);
 		oSocket.on('game_bet_gold_ok', processGameBetGoldOk);
 		oSocket.on('game_stand_ok', processGameStandOk);
-<<<<<<< HEAD
 		oSocket.on('game_end', processGameEnd);
-=======
-		oSocket.on('game_opponent_stand_ok', processGameOpponentStandOk);
->>>>>>> 4dbd9906d32694a293616170a751d4d17c50fd47
 	}
 
 	function sendJoin() {
@@ -120,19 +116,11 @@ indian.che.socket =(function() {
 	}
 
 	function processGameStandOk(htData) {
-<<<<<<< HEAD
-		Ui.proceeGameStandOk(htData);
-	}
-
-	function processGameEnd(htData) {
-		console.log(htData.htResult);
-=======
 		Ui.processGameStandOk(htData);
 	}
 
-	function processGameOpponentStandOk(htData) {
-		Ui.processGameOpponentStandOk(htData);
->>>>>>> 4dbd9906d32694a293616170a751d4d17c50fd47
+	function processGameEnd(htData) {		
+		console.log(htData.htResult);
 	}
 
 	return {

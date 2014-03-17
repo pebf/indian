@@ -161,7 +161,7 @@ indian.che.ui = (function() {
 	function processGameBetGoldOk(htData) {
 		var bIsUser = htData.htUser.sName === getData('username');
 
-		updateUserInfo(htData.htUser, bIsUser);
+		updateUserGold(htData.htUser.nGold, bIsUser);
 		updateBetGold(htData.nBetGold + htData.nPrevBetGold);
 
 		showGameLog(bIsUser ? 'game_user_bet_gold_ok' : 'game_opponent_bet_gold_ok'
@@ -172,23 +172,15 @@ indian.che.ui = (function() {
 	function processGameStandOk(htData) {
 		var bIsUser = htData.htUser.sName === getData('username');
 
-		updateUserInfo(htData.htUser, bIsUser);
+		updateUserGold(htData.htUser.nGold, bIsUser);
 		updateBetGold(htData.nBetGold);
 
-		this.htElement['bet_layer'].hide();
+		htElement['bet_layer'].hide();
 
 		showGameLog(bIsUser ? 'game_user_stand_ok' : 'game_opponent_stand_ok'
 					, { nBetGold : htData.nBetGold});
 	}
-
-	function processGameStandOk(htData) {
-		updateUserGold(htData.nUserGold, true);
-		updateBetGold(htData.nBetGold);
-
-		showGameLog('game_stand_ok');
-		htElement['bet_layer'].hide();
-	}
-
+	
 	function processGameOpponentStandOk(htData) {
 		updateUserGold(htData.nUserGold);
 		updateBetGold(htData.nBetGold);

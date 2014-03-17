@@ -170,7 +170,7 @@ module.exports = function(app) {
 		var htResult = Master.getGameResult(htRoom)
 			, sRoomId = htRoom.sRoomId;
 
-		console.log('********* htResult ***********');
+		Master.gameEnd(htRoom, htResult);
 		
 		socket.emit('game_end', {
 			htResult : htResult
