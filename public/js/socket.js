@@ -21,6 +21,7 @@ indian.che.socket =(function() {
 		oSocket.on('game_opponent_bet', processGameOpponentBet);
 		oSocket.on('game_bet_gold_ok', processGameBetGoldOk);
 		oSocket.on('game_stand_ok', processGameStandOk);
+		oSocket.on('game_opponent_stand_ok', processGameOpponentStandOk);
 		oSocket.on('game_end', processGameEnd);
 	}
 
@@ -119,8 +120,12 @@ indian.che.socket =(function() {
 		Ui.processGameStandOk(htData);
 	}
 
+	function processGameOpponentStandOk(htData) {
+		Ui.processGameOpponentStandOk(htData);
+	}
+
 	function processGameEnd(htData) {		
-		console.log(htData.htResult);
+		Ui.processGameEnd(htData);
 	}
 
 	return {

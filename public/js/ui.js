@@ -183,8 +183,27 @@ indian.che.ui = (function() {
 	
 	function processGameOpponentStandOk(htData) {
 		updateUserGold(htData.nUserGold);
-		updateBetGold(htData.nBetGold);
-		showGameLog('game_opponent_stand_ok');
+		updateBetGold(htData.nTotalBetGold);
+		showGameLog('game_opponent_stand_ok', { nBetGold : htData.nBetGold});
+	}
+
+	function processGameEnd(htData) {
+		if (htData.htResult.sType === 'draw') {
+			showGameLog('game_draw');
+			return;
+		}
+
+		var bIsUser = htData.htWinner.sName === getData('username');
+
+		if (bIsUser) {
+			showGameLog('game_win');
+
+		} else {
+			showGameLog('game_lose');
+		}
+
+
+		
 	}
 
 	function updateUserGold(nGold, bIsUser) {
@@ -318,6 +337,15 @@ indian.che.ui = (function() {
 			case 'game_opponent_stand_ok' :
 				sMsg = '상대방이 <strong>' + htOption.nBetGold + '</strong> 골드로 스탠드하였습니다.';
 				break;
+			case 'game_win' :
+				sMsg = '승리하였습니다.';
+				break;
+			case 'game_lose' :
+				sMsg = '상대방이 승리하였습니다.';
+				break;
+			case 'game_draw' :
+				sMsg = '무승부입니다.';
+				break;
 		}
 		
 		welGameLog.append('<p>' + sMsg + '</p>');
@@ -410,6 +438,7 @@ indian.che.ui = (function() {
 		, processGameBetGoldOk : processGameBetGoldOk
 		, processGameStandOk : processGameStandOk
 		, processGameOpponentStandOk : processGameOpponentStandOk
+		, processGameEnd : processGameEnd
 	}
 
 })();

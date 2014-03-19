@@ -151,12 +151,14 @@ module.exports = function(app) {
 		socket.emit('game_stand_ok', {
 			htUser : htUserInTurn			
 			, nUserGold : htUserInTurn.nBetGold
-			, nBetGold : htGame.nBetGold
+			, nBetGold : htGame.nPrevBetGold
+			, nTotalBetGold : htGame.nBetGold
 		});
 
 		socket.broadcast.to(htRoom.sRoomId).emit('game_opponent_stand_ok', {
 			nUserGold : htUserInTurn.nBetGold
 			, nBetGold : htGame.nPrevBetGold
+			, nTotalBetGold : htGame.nBetGold
 		});
 
 		processGameJudge(socket, htRoom);
@@ -168,17 +170,22 @@ module.exports = function(app) {
 
 	function processGameJudge(socket, htRoom) {
 		var htResult = Master.getGameResult(htRoom)
-			, sRoomId = htRoom.sRoomId;
+			, sRoomId = htRoom.sRoomId
+			, htWinner = Master.getUserByName(htResult.sName);
 
 		Master.gameEnd(htRoom, htResult);
 		
 		socket.emit('game_end', {
 			htResult : htResult
+			, htWinner : htWinner
+			, htGame : htRoom.htGame
 		});
 
 		socket.broadcast.to(htRoom.sRoomId).emit('game_end', {
 			htResult : htResult
-		});		
+			, htWinner : htWinner
+			, htGame : htRoom.htGame
+		});
 	}
 
 	function processGameGiveUp(socket, htRoom) {

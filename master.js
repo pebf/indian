@@ -393,7 +393,7 @@ var Master = module.exports = {
 	, gameEnd : function(htRoom, htResult) {
 		var htGame = htRoom.htGame
 			, nBetGold = htGame.nBetGold
-			, sWinnerName = htGame.sName
+			, sWinnerName = htResult.sName
 			, htWinner;
 
 		if (sWinnerName) {
@@ -413,6 +413,10 @@ var Master = module.exports = {
 	}
 
 	, gameInit : function(htGame) {
-		//////////// TODO!!!!!!!!!!
+		htGame.aShareCards = [];
+		htGame.aCardInHands = [];
+		htGame.nBetGold = 0;
+		htGame.nPrevBetGold = 0;
+		htGame,nTurn = 1;		
 	}
 }
