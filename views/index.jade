@@ -125,6 +125,11 @@ html
         input.choose_input(type='text', value='1')
         input.choose_btn._bet_gold_btn._bet_gold(type='button', value='배팅')
         input.choose_btn._bet_gold_btn._cancel(type='button', value='취소')
+    .choose_layer._result_layer(style='display:none;')
+      .choose_text._choose_text
+         p
+      .choose_input_area
+         input.choose_btn._result_ok(type='button', value='확인')
     script(type='text/javascript', src='/js/libs/jquery-1.10.2.js')
     script(type='text/javascript', src='/socket.io/socket.io.js')
     script(type='text/javascript', src='/js/index.js')

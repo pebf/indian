@@ -165,6 +165,25 @@ module.exports = function(app) {
 	}
 
 	function processGameGiveUp(socket, htData) {
+		var htRoom = Master.getRoomById(htData.sRoomId)
+			, htGame = htRoom.htGame
+			, htGiveUpUser = Master.getRoomById(htData.sUserName);
+
+		socket.emit('game_give_up_ok', {
+			htUser : htUserInTurn
+			, nUserGold : htUserInTurn.nBetGold
+			, nBetGold : htGame.nPrevBetGold
+			, nTotalBetGold : htGame.nBetGold
+		});
+
+		socket.broadcast.to(htRoom.sRoomId).emit('game_give_up_ok', {
+			nUserGold : htUserInTurn.nBetGold
+			, nBetGold : htGame.nPrevBetGold
+			, nTotalBetGold : htGame.nBetGold
+		});
+
+
+
 
 	}
 
@@ -189,6 +208,6 @@ module.exports = function(app) {
 	}
 
 	function processGameGiveUp(socket, htRoom) {
-
+		
 	}
 }

@@ -62,8 +62,9 @@ indian.che.ui = (function() {
 		htElement['game_log'] = htElement['msg_area'].find('._game_log_content');
 		htElement['chat_box'] = htElement['msg_area'].find('._chat_content');
 
-		htElement['bet_layer'] = $('body > ._bet_layer');
-		htElement['bet_gold_layer'] = $('body > ._bet_gold_layer');
+		htElement['bet_layer'] = $('body > div._bet_layer');
+		htElement['bet_gold_layer'] = $('body > div._bet_gold_layer');
+		htElement['result_layer'] = $('body > div._result_layer');
 	}
 
 	function attachEvent() {
@@ -187,23 +188,36 @@ indian.che.ui = (function() {
 		showGameLog('game_opponent_stand_ok', { nBetGold : htData.nBetGold});
 	}
 
+	function processGameGiveOk(htData) {
+
+	}
+
 	function processGameEnd(htData) {
-		if (htData.htResult.sType === 'draw') {
+		var htResult = htData.htResult
+			, sType = htResult.sType
+			, bIsUser;
+
+		if (sType === 'draw') {
 			showGameLog('game_draw');
-			return;
-		}
-
-		var bIsUser = htData.htWinner.sName === getData('username');
-
-		if (bIsUser) {
-			showGameLog('game_win');
 
 		} else {
-			showGameLog('game_lose');
+			bIsUser = htData.htWinner.sName === getData('username');
+		 	
+			showGameLog(bIsUser ? 'game_win' : 'game_lose'
+						, { sType : sType }
+			);
 		}
 
+		htElement['result_layer'].find('> div._choose_text > p')
+			.html(makeResultText(htResult, bIsUser));
+		showLayer(htElement['result_layer']);
+	}
 
-		
+	function showLayer(welLayer) {
+		var nLeft = ($(document).width() - welLayer.width()) / 2;
+
+		welLayer.css('left', nLeft)
+			.show();
 	}
 
 	function updateUserGold(nGold, bIsUser) {
@@ -363,24 +377,19 @@ indian.che.ui = (function() {
 	function showBetLayer(bIsFirstBet) {
 		htElement['bet_gold_layer'].hide();
 
-		var welBetLayer = htElement['bet_layer']
-			, nLeft = ($(document).width() - welBetLayer.width()) / 2;
+		var welBetLayer = htElement['bet_layer'];
 
 		if (bIsFirstBet) {
 			welBetLayer.find('> ._stand').hide();
 			welBetLayer.find('> ._give_up').hide();
 		}
-		
-		welBetLayer.css('left', nLeft)
-				.show();
+
+		showLayer(welBetLayer);
 	}
 
 	function showBetGoldLayer() {
 		htElement['bet_layer'].hide();
-
-		var nLeft = ($(document).width() - htElement['bet_gold_layer'].width()) / 2;
-		htElement['bet_gold_layer'].css('left', nLeft)
-								.show();
+		showLayer(htElement['bet_gold_layer']);
 	}
 
 	function clickBetBtn(welTarget) {
@@ -421,6 +430,32 @@ indian.che.ui = (function() {
 		htElement['bet_gold_layer'].hide();
 	}
 
+	function makeResultText(htResult, bIsUser) {
+		if (htResult.sType === 'draw') {
+			return '무승부입니다.'
+		}
+
+		var sText = bIsUser ? '상대방이 ' : '';
+
+		switch (htResult.sType) {
+			case 'triple' :
+			sText += '트리플'
+			break;
+			case 'straight' :
+			sText += '스트레이트'
+			break;
+			case 'pair' :
+			sText += '페어'
+			break;
+			case 'larger_num' :
+			sText += '큰 숫자'
+			break;
+		}
+
+		sText += '로 승리하였습니다.';
+		return sText;
+	}
+
 	return {
 		initialize : initialize
 		, showShareCards : showShareCards
@@ -438,6 +473,7 @@ indian.che.ui = (function() {
 		, processGameBetGoldOk : processGameBetGoldOk
 		, processGameStandOk : processGameStandOk
 		, processGameOpponentStandOk : processGameOpponentStandOk
+		, processGameGiveOk : processGameGiveOk
 		, processGameEnd : processGameEnd
 	}
 
