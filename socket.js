@@ -181,33 +181,29 @@ module.exports = function(app) {
 			, nBetGold : htGame.nPrevBetGold
 			, nTotalBetGold : htGame.nBetGold
 		});
-
-
-
-
 	}
 
 	function processGameJudge(socket, htRoom) {
 		var htResult = Master.getGameResult(htRoom)
 			, sRoomId = htRoom.sRoomId
-			, htWinner = Master.getUserByName(htResult.sName);
+			, htWinner = Master.getUserByName(htResult.sName)
+			, htGame = htRoom.htGame
+			, aCardInHands = htGame.aCardInHands;
 
 		Master.gameEnd(htRoom, htResult);
 		
 		socket.emit('game_end', {
 			htResult : htResult
 			, htWinner : htWinner
-			, htGame : htRoom.htGame
+			, htGame : htGame
+			, aCardInHands : aCardInHands
 		});
 
 		socket.broadcast.to(htRoom.sRoomId).emit('game_end', {
 			htResult : htResult
 			, htWinner : htWinner
-			, htGame : htRoom.htGame
+			, htGame : htGame
+			, aCardInHands : aCardInHands
 		});
-	}
-
-	function processGameGiveUp(socket, htRoom) {
-		
 	}
 }

@@ -89,6 +89,10 @@ indian.che.ui = (function() {
 		} else if (welTarget.hasClass('_bet_gold_btn')) {
 			clickBetGoldBtn(welTarget);
 			we.preventDefault();
+
+		} else if (welTarget.hasClass('_result_ok')) {
+			initNewGame(welTarget);
+			we.preventDefault();
 		}
 	}
 
@@ -202,14 +206,17 @@ indian.che.ui = (function() {
 
 		} else {
 			bIsUser = htData.htWinner.sName === getData('username');
-		 	
 			showGameLog(bIsUser ? 'game_win' : 'game_lose'
 						, { sType : sType }
 			);
 		}
+		
+		revealUserCard(htData.aCardInHands);
 
-		htElement['result_layer'].find('> div._choose_text > p')
+		htElement['result_layer']
+			.find('> div._choose_text > p')
 			.html(makeResultText(htResult, bIsUser));
+
 		showLayer(htElement['result_layer']);
 	}
 
@@ -220,10 +227,30 @@ indian.che.ui = (function() {
 			.show();
 	}
 
+	function hideLayer() {
+		htElement['bet_layer'].hide();
+		htElement['bet_gold_layer'].hide();
+		htElement['result_layer'].hide();
+	}
+
+	function revealUserCard(aCardInHands) {
+		var nCard;
+
+		for(var i = 0, nLength = aCardInHands.length; i < nLength; i++) {
+			htCardInHands = aCardInHands[i];
+
+			if (htCardInHands.sName === getData('username')) {
+				nCard = htCardInHands.nCard;
+			}
+		}
+
+		showUserCard(nCard);
+	}
+
 	function updateUserGold(nGold, bIsUser) {
 		var welInfo;
 
-		if (bIsUser)	 {
+		if (bIsUser) {
 			welInfo = htElement['user_info'];
 			setData('usergold', nGold);
 			
@@ -238,6 +265,11 @@ indian.che.ui = (function() {
 
 	function updateBetGold(nBetGold) {
 		htElement['bet_gold'].html(nBetGold);
+	}
+
+	function showReadyBtn() {
+		findReadyBtn().show();
+		findReadyBtn(true).show();
 	}
 
 	function hideReadyBtn(welBtn) {
@@ -439,21 +471,27 @@ indian.che.ui = (function() {
 
 		switch (htResult.sType) {
 			case 'triple' :
-			sText += '트리플'
+			sText += '트리플';
 			break;
 			case 'straight' :
-			sText += '스트레이트'
+			sText += '스트레이트';
 			break;
 			case 'pair' :
-			sText += '페어'
+			sText += '페어';
 			break;
 			case 'larger_num' :
-			sText += '큰 숫자'
+			sText += '큰 숫자';
 			break;
 		}
 
 		sText += '로 승리하였습니다.';
 		return sText;
+	}
+
+	function initNewGame() {
+		hideLayer();
+		updateBetGold(0);
+		showReadyBtn();
 	}
 
 	return {
