@@ -192,7 +192,7 @@ indian.che.ui = (function() {
 		showGameLog('game_opponent_stand_ok', { nBetGold : htData.nBetGold});
 	}
 
-	function processGameGiveOk(htData) {
+	function processGameGiveUpOk(htData) {
 
 	}
 
@@ -463,22 +463,31 @@ indian.che.ui = (function() {
 	}
 
 	function makeResultText(htResult, bIsUser) {
-		if (htResult.sType === 'draw') {
-			return '무승부입니다.'
+		var sType = htResult.sType;
+
+		if (sType === 'draw') {
+			return '무승부입니다.';
 		}
 
-		var sText = bIsUser ? '상대방이 ' : '';
+		var sText = bIsUser ? '' : '상대방이 ';
 
-		switch (htResult.sType) {
+		if (sType === 'give_up') {
+			return '기권하였습니다.';
+		}
+
+		switch (sType) {
 			case 'triple' :
 			sText += '트리플';
 			break;
+
 			case 'straight' :
 			sText += '스트레이트';
 			break;
+
 			case 'pair' :
 			sText += '페어';
 			break;
+
 			case 'larger_num' :
 			sText += '큰 숫자';
 			break;
@@ -511,7 +520,7 @@ indian.che.ui = (function() {
 		, processGameBetGoldOk : processGameBetGoldOk
 		, processGameStandOk : processGameStandOk
 		, processGameOpponentStandOk : processGameOpponentStandOk
-		, processGameGiveOk : processGameGiveOk
+		, processGameGiveUpOk : processGameGiveUpOk
 		, processGameEnd : processGameEnd
 	}
 

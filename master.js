@@ -39,6 +39,19 @@ var Master = module.exports = {
 		return aUsers[0];
 	}
 
+	, getAnotherUserInRoom : function (htRoom, sName) {
+		var aMember = htRoom.aMember
+			, htUser = aMember[0];
+
+		if (htUser.sName !== sName) {
+			return htUser;
+		} else {
+			return aMember[1];
+		}
+
+		
+	}
+
 	, checkValidUser : function (htUser) {
 		var bIsValid = true
 			, htSampleUser = this.createUser();
@@ -410,6 +423,21 @@ var Master = module.exports = {
 		}
 
 		this.gameInit(htGame);
+	}
+
+	, gameGiveUp : function(htRoom, sLoserName) {
+		var htGame = htRoom.htGame
+			, nBetGold = htGame.nBetGold
+			, htWinner = getAnotherUserInRoom(htRoom, sLoserName);
+
+		htWinner.nGold += nBetGold;
+		this.gameInit(htGame);
+
+		return {
+			sName : htWinner.sName
+			, sType : 'give_up'
+		}
+			
 	}
 
 	, gameInit : function(htGame) {

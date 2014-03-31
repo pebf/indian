@@ -149,7 +149,7 @@ module.exports = function(app) {
 		htUserInTurn.nGold -= htGame.nPrevBetGold;
 
 		socket.emit('game_stand_ok', {
-			htUser : htUserInTurn			
+			htUser : htUserInTurn
 			, nUserGold : htUserInTurn.nBetGold
 			, nBetGold : htGame.nPrevBetGold
 			, nTotalBetGold : htGame.nBetGold
