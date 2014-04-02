@@ -156,6 +156,8 @@ indian.che.ui = (function() {
 
 		showOpponentCard(htData.nOpponentCard);
 		showGameLog('game_show_opponent_card', {nOpponentCard : htData.nOpponentCard});
+
+		showUserCard();
 	}
 
 	function processGameBet(bIsFirstBet) {
@@ -193,7 +195,11 @@ indian.che.ui = (function() {
 	}
 
 	function processGameGiveUpOk(htData) {
+		showGameLog('game_give_up_ok');
+	}
 
+	function processGameOpponentGiveUpOk(htData) {
+		showGameLog('game_opponent_give_up_ok');
 	}
 
 	function processGameEnd(htData) {
@@ -292,7 +298,7 @@ indian.che.ui = (function() {
 		var htOpponent = findOpponentInMember(aMember)
 			, welPlayerBox = htElement['opponent_info'].find('> ._player_box')
 			, welName = welPlayerBox.find('> ._player_box_header > ._player_name')
-			, welGold = welPlayerBox.find('> ._player_box_body  ._ganet');
+			, welGold = welPlayerBox.find('> ._player_box_body  ._gold');
 
 		welName.html(htOpponent.sName);
 		welGold.html(htOpponent.nGold);
@@ -327,14 +333,14 @@ indian.che.ui = (function() {
 
 	function showUserCard(nUserCard) {
 		var welCard = (typeof nUserCard === 'undefined') ?
-			makeCardHTML(''. true) : makeCardHTML(nUserCard);
+			makeCardHTML() : makeCardHTML(nUserCard);
 
 		htElement['user_card_wrap'].html(welCard);
 	}
 
-	function makeCardHTML(nNum, bIsBack) {
+	function makeCardHTML(nNum) {
 		var aCardHTML = []
-			, sBack = bIsBack ? 'back' : ''
+			, sBack = nNum ? '' : 'back'
 			, sNum = nNum ? '<span>' + nNum + '</span>' : '';
 
 		aCardHTML.push('<div class="card ' + sBack + '">');
@@ -382,6 +388,12 @@ indian.che.ui = (function() {
 				break;
 			case 'game_opponent_stand_ok' :
 				sMsg = '상대방이 <strong>' + htOption.nBetGold + '</strong> 골드로 스탠드하였습니다.';
+				break;
+			case 'game_give_up_ok' :
+				sMsg = '포기하였습니다.';
+				break;
+			case 'game_opponent_give_up_ok' :
+				sMsg = '상대방이 포기하였습니다.';
 				break;
 			case 'game_win' :
 				sMsg = '승리하였습니다.';
@@ -467,34 +479,33 @@ indian.che.ui = (function() {
 
 		if (sType === 'draw') {
 			return '무승부입니다.';
+		}		
+
+		if (sType === 'give_up') {
+			return (bIsUser ? '상대방이 ' : '') + '기권하였습니다.';
 		}
 
 		var sText = bIsUser ? '' : '상대방이 ';
 
-		if (sType === 'give_up') {
-			return '기권하였습니다.';
-		}
-
 		switch (sType) {
 			case 'triple' :
-			sText += '트리플';
+			sText += '트리플로';
 			break;
 
 			case 'straight' :
-			sText += '스트레이트';
+			sText += '스트레이트로';
 			break;
 
 			case 'pair' :
-			sText += '페어';
+			sText += '페어로';
 			break;
 
 			case 'larger_num' :
-			sText += '큰 숫자';
+			sText += '큰 숫자로';
 			break;
 		}
 
-		sText += '로 승리하였습니다.';
-		return sText;
+		return sText + ' 승리하였습니다.';
 	}
 
 	function initNewGame() {
@@ -521,7 +532,7 @@ indian.che.ui = (function() {
 		, processGameStandOk : processGameStandOk
 		, processGameOpponentStandOk : processGameOpponentStandOk
 		, processGameGiveUpOk : processGameGiveUpOk
+		, processGameOpponentGiveUpOk : processGameOpponentGiveUpOk
 		, processGameEnd : processGameEnd
 	}
-
 })();

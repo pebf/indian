@@ -167,20 +167,17 @@ module.exports = function(app) {
 	function processGameGiveUp(socket, htData) {
 		var htRoom = Master.getRoomById(htData.sRoomId)
 			, htGame = htRoom.htGame
-			, htGiveUpUser = Master.getRoomById(htData.sUserName);
+			, htGiveUpUser = Master.getUserByName(htData.sUserName)
+			, htResult, htWinner, aCardInHands;	
 
-		socket.emit('game_give_up_ok', {
-			htUser : htUserInTurn
-			, nUserGold : htUserInTurn.nBetGold
-			, nBetGold : htGame.nPrevBetGold
-			, nTotalBetGold : htGame.nBetGold
-		});
+		socket.emit('game_give_up_ok', {});
+		socket.broadcast.to(htRoom.sRoomId).emit('game_opponent_give_up_ok', {});
 
-		socket.broadcast.to(htRoom.sRoomId).emit('game_give_up_ok', {
-			nUserGold : htUserInTurn.nBetGold
-			, nBetGold : htGame.nPrevBetGold
-			, nTotalBetGold : htGame.nBetGold
-		});
+		htResult = Master.gameGiveUp(htRoom, htData.sUserName);
+		htWinner = Master.getAnotherUserInRoom(htRoom, htData.sUserName);
+		aCardInHands = htGame.aCardInHands;
+		
+		sendGameEnd(socket, htResult, htWinner, aCardInHands, htRoom.sRoomId);
 	}
 
 	function processGameJudge(socket, htRoom) {
@@ -191,18 +188,19 @@ module.exports = function(app) {
 			, aCardInHands = htGame.aCardInHands;
 
 		Master.gameEnd(htRoom, htResult);
-		
+		sendGameEnd(socket, htResult, htWinner, aCardInHands, htRoom.sRoomId);
+	}
+
+	function sendGameEnd(socket, htResult, htWinner, aCardInHands, sRoomId) {
 		socket.emit('game_end', {
 			htResult : htResult
 			, htWinner : htWinner
-			, htGame : htGame
 			, aCardInHands : aCardInHands
 		});
 
-		socket.broadcast.to(htRoom.sRoomId).emit('game_end', {
+		socket.broadcast.to(sRoomId).emit('game_end', {
 			htResult : htResult
 			, htWinner : htWinner
-			, htGame : htGame
 			, aCardInHands : aCardInHands
 		});
 	}

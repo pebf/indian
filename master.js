@@ -428,7 +428,7 @@ var Master = module.exports = {
 	, gameGiveUp : function(htRoom, sLoserName) {
 		var htGame = htRoom.htGame
 			, nBetGold = htGame.nBetGold
-			, htWinner = getAnotherUserInRoom(htRoom, sLoserName);
+			, htWinner = this.getAnotherUserInRoom(htRoom, sLoserName);
 
 		htWinner.nGold += nBetGold;
 		this.gameInit(htGame);

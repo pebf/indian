@@ -23,6 +23,7 @@ indian.che.socket =(function() {
 		oSocket.on('game_stand_ok', processGameStandOk);
 		oSocket.on('game_opponent_stand_ok', processGameOpponentStandOk);
 		oSocket.on('game_give_up_ok', processGameGiveUpOk);
+		oSocket.on('game_opponent_give_up_ok', processGameOpponentGiveUpOk);
 		oSocket.on('game_end', processGameEnd);
 	}
 
@@ -128,6 +129,10 @@ indian.che.socket =(function() {
 
 	function processGameGiveUpOk(htData) {
 		Ui.processGameGiveUpOk(htData);
+	}
+
+	function processGameOpponentGiveUpOk(htData) {
+		Ui.processGameOpponentGiveUpOk(htData);
 	}
 
 	function processGameEnd(htData) {		
