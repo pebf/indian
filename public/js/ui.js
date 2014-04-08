@@ -511,7 +511,9 @@ indian.che.ui = (function() {
 	function initNewGame() {
 		hideLayer();
 		updateBetGold(0);
+
 		showReadyBtn();
+		emptyCardWrap();
 	}
 
 	function moveCardTo(elTarget, fCallback, bIsShareCard) {
@@ -555,6 +557,12 @@ indian.che.ui = (function() {
 		}, nMoveTime, function() {
 			welSecondCard.remove();
 		})
+	}
+
+	function emptyCardWrap() {
+		htElement['user_card_wrap'].empty();
+		htElement['opponent_card_wrap'].empty();
+		htElement['share_card_wrap'].empty();
 	}
 	
 
