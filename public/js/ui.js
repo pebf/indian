@@ -1,7 +1,8 @@
 indian.che.ui = (function() {
 	var Socket
 		, htElement = {}		
-		, htData = {};		
+		, htData = {}
+		, nMoveTime = 1000;		
 
 	function initialize () {
 		Socket = indian.che.socket;
@@ -55,7 +56,6 @@ indian.che.ui = (function() {
 
 		htElement['board_btm'] = htElement['board'].find('> div._btm_area');
 		htElement['deck_card_wrap'] = htElement['board_btm'].find('div._card_wrap');
-		htElement['board_card_wrap'] = htElement['board'].find('div._card_wrap');
 		htElement['bet_gold'] = htElement['middle_area'].find('> div._bet_box > p._bet_gold');
 
 		htElement['msg_area'] = $(document.body).find('> ._msg_area');
@@ -150,14 +150,14 @@ indian.che.ui = (function() {
 		showGameLog('game_start');
 	}
 
-	function processGameInit(htData) {
-		showShareCards(htData.aShareCards);
+	function processGameInit(htData) {		
+		moveCardTo(htElement['share_card_wrap'], showShareCards.bind(this, htData.aShareCards), true);
 		showGameLog('game_show_share_cards', {aShareCards : htData.aShareCards});
 
-		showOpponentCard(htData.nOpponentCard);
+		moveCardTo(htElement['opponent_card_wrap'], showOpponentCard.bind(this, htData.nOpponentCard));
 		showGameLog('game_show_opponent_card', {nOpponentCard : htData.nOpponentCard});
 
-		showUserCard();
+		moveCardTo(htElement['user_card_wrap'], showUserCard);
 	}
 
 	function processGameBet(bIsFirstBet) {
@@ -514,6 +514,50 @@ indian.che.ui = (function() {
 		showReadyBtn();
 	}
 
+	function moveCardTo(elTarget, fCallback, bIsShareCard) {
+		var startOffset = htElement['deck_card_wrap'].offset()
+			, endOffset = elTarget.offset()
+			, welCard = $(makeCardHTML())
+						.css('position', 'absolute')
+						.offset({ left : startOffset.left
+								, top : startOffset.top});
+
+		$(document.body).append(welCard);
+
+		// 공유 카드 영역에 카드 뿌릴 때의 처리
+		if (bIsShareCard) {
+			moveSecondCard(startOffset, endOffset);
+		}
+
+		welCard.animate({
+			left : endOffset.left
+			, top : endOffset.top
+		}, nMoveTime, function() {
+			if (typeof fCallback === 'function') {
+				fCallback();
+			}
+
+			welCard.remove();
+		});
+	}
+
+	function moveSecondCard(startOffset, endOffset) {
+		var welSecondCard = $(makeCardHTML())
+							.css('position', 'absolute')
+							.offset({ left : startOffset.left
+									, top : startOffset.top});
+			
+		$(document.body).append(welSecondCard);
+
+		welSecondCard.animate({
+			left : endOffset.left + 92
+			, top : endOffset.top
+		}, nMoveTime, function() {
+			welSecondCard.remove();
+		})
+	}
+	
+
 	return {
 		initialize : initialize
 		, showShareCards : showShareCards
@@ -533,6 +577,6 @@ indian.che.ui = (function() {
 		, processGameOpponentStandOk : processGameOpponentStandOk
 		, processGameGiveUpOk : processGameGiveUpOk
 		, processGameOpponentGiveUpOk : processGameOpponentGiveUpOk
-		, processGameEnd : processGameEnd
+		, processGameEnd : processGameEnd		
 	}
 })();
