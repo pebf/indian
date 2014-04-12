@@ -148,15 +148,14 @@ module.exports = function(app) {
 		htGame.nBetGold += htGame.nPrevBetGold;
 		htUserInTurn.nGold -= htGame.nPrevBetGold;
 
-		socket.emit('game_stand_ok', {
-			htUser : htUserInTurn
-			, nUserGold : htUserInTurn.nBetGold
+		socket.emit('game_stand_ok', {			
+			nUserGold : htUserInTurn.nGold
 			, nBetGold : htGame.nPrevBetGold
 			, nTotalBetGold : htGame.nBetGold
 		});
 
 		socket.broadcast.to(htRoom.sRoomId).emit('game_opponent_stand_ok', {
-			nUserGold : htUserInTurn.nBetGold
+			nUserGold : htUserInTurn.nGold
 			, nBetGold : htGame.nPrevBetGold
 			, nTotalBetGold : htGame.nBetGold
 		});

@@ -123,7 +123,7 @@ indian.che.socket =(function() {
 		Ui.processGameStandOk(htData);
 	}
 
-	function processGameOpponentStandOk(htData) {
+	function processGameOpponentStandOk(htData) {		
 		Ui.processGameOpponentStandOk(htData);
 	}
 

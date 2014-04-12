@@ -177,15 +177,12 @@ indian.che.ui = (function() {
 	}
 
 	function processGameStandOk(htData) {
-		var bIsUser = htData.htUser.sName === getData('username');
-
-		updateUserGold(htData.htUser.nGold, bIsUser);
+		updateUserGold(htData.nUserGold, true);
 		updateBetGold(htData.nBetGold);
 
 		htElement['bet_layer'].hide();
-
-		showGameLog(bIsUser ? 'game_user_stand_ok' : 'game_opponent_stand_ok'
-					, { nBetGold : htData.nBetGold});
+		
+		showGameLog('game_user_stand_ok', { nBetGold : htData.nBetGold});
 	}
 	
 	function processGameOpponentStandOk(htData) {
@@ -204,6 +201,7 @@ indian.che.ui = (function() {
 
 	function processGameEnd(htData) {
 		var htResult = htData.htResult
+			, htWinner = htData.htWinner
 			, sType = htResult.sType
 			, bIsUser;
 
@@ -211,7 +209,8 @@ indian.che.ui = (function() {
 			showGameLog('game_draw');
 
 		} else {
-			bIsUser = htData.htWinner.sName === getData('username');
+			bIsUser = htWinner.sName === getData('username');
+			updateUserGold(htWinner.nGold);
 			showGameLog(bIsUser ? 'game_win' : 'game_lose'
 						, { sType : sType }
 			);
