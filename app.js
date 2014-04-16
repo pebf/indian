@@ -50,14 +50,16 @@ app.post('/waitingRoom', function(req, res) {
 
 	if (!sName || sName.trim() === '') {
 		res.render('login', {
-			sErrorMsg : 'input your name.'
+			sErrorMsg : 'Input your name'
 		});
+		return;
 	}
 
 	if (Master.hasUser(sName)) {
 		res.render('login', {
-			sErrorMsg : 'nickname is already exists.'
+			sErrorMsg : 'Nickname is already exists'
 		});
+		return;
 	}
 
 	var htUser = Master.createUser(sName);
@@ -72,6 +74,11 @@ app.post('/waitingRoom', function(req, res) {
 });
 
 app.post('/makeRoom', function(req, res) {
+	if (req.session.sName == 'undefiend') {
+		res.render('login');
+		return;
+	}
+
 	var sRoomName = req.body.roomName
 		, htRoom = Master.createRoom(sRoomName)
 		, htUser = Master.getUserByName(req.session.sName);
@@ -88,6 +95,11 @@ app.post('/makeRoom', function(req, res) {
 });
 
 app.get('/join/:roomId', function(req, res) {
+	if (req.session.sName == 'undefiend') {
+		res.render('login');
+		return;
+	}
+
 	var sRoomId = req.params.roomId
 		, htUser = Master.getUserByName(req.session.sName)
 		, htRoom = Master.getRoomById(sRoomId);

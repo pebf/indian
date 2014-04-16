@@ -172,6 +172,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1d79f4', end
 /* waitingroom - roomlist */
 .room_ct{float:left;margin-left: 25px;}
 .room_area{width:670px;border: 1px solid #000000;border-radius: 4px;}
+.room_area .waitingroom_header h3{width:300px;float:left;}
+.room_area .waitingroom_header p{float:right; color:rgb(200, 200, 200);margin: 10px 10px 0 0;}
 .room_area_body{height: 499px;background-color: rgb(43, 43, 44);border-radius: 0 0 4px 4px;}
 .room_area_body ul{margin: 0 10px;}
 .room_item{background-color: #121212;border: 1px solid #000000;height:57px;font-size: 13px;}

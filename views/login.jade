@@ -17,6 +17,7 @@ html
           form(action='/waitingRoom', method='POST')
              p.box_logo.eater_font Indian Holdem
              p.box_txt.eater_font Input Your Name
+             p.box_error_txt #{sErrorMsg}&nbsp;
              input.name_input._name(type='text', name='name')
              input.entrance._go_match.eater_font(type='submit', value='GAME START')
      script(type='text/javascript', src='./js/libs/jquery-1.10.2.js')
