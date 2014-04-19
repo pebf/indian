@@ -34,7 +34,7 @@ html
                     span.num 0
           li.room_menu_item
             h4 자동 입장 하기
-            form(action='/randomMatch')
+            form(action='/randomMatch', method='POST')
               input(type='submit', value='RANDOM MATCH')
           li.room_menu_item
             h4 방 만들기

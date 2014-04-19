@@ -47,9 +47,24 @@ var Master = module.exports = {
 			return htUser;
 		} else {
 			return aMember[1];
+		}		
+	}
+
+	, getAvailableRoom : function () {
+		var aRooms = this.aRooms
+			, aAvailableRooms = []
+			, htRoom
+			, nRandom;
+
+		for (var i = 0; i < aRooms.length; i++)	{
+			htRoom = aRooms[i];
+			if (htRoom.aMember.length < 2) {
+				aAvailableRooms.push(htRoom);
+			}
 		}
 
-		
+		nRandom = Math.floor(Math.random() * aAvailableRooms.length);
+		return aAvailableRooms[nRandom];
 	}
 
 	, checkValidUser : function (htUser) {
