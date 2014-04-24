@@ -120,9 +120,7 @@ var Master = module.exports = {
 		return aRooms[0];
 	}
 
-	, joinRoom : function (sRoomId, htUser) {
-		var htRoom = this.getRoomById(sRoomId);
-
+	, joinRoom : function (htRoom, htUser) {
 		if (!this.isMemberInRoom(htRoom.aMember, htUser)) {
 			htRoom.aMember.push(htUser);
 		}

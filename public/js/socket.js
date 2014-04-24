@@ -25,6 +25,7 @@ indian.che.socket =(function() {
 		oSocket.on('game_give_up_ok', processGameGiveUpOk);
 		oSocket.on('game_opponent_give_up_ok', processGameOpponentGiveUpOk);
 		oSocket.on('game_end', processGameEnd);
+		oSocket.on('exited_room', processExitedRoom);
 	}
 
 	function sendJoin() {
@@ -139,6 +140,14 @@ indian.che.socket =(function() {
 		Ui.processGameEnd(htData);
 	}
 
+	function proceeExitedRoom(htData) {
+		Ui.processExitedRoom(htData);
+	}
+
+	function sendExitRoom(sUserName) {
+		oSocket.emit('exit_room', {sUserName : sUserName});
+	}
+
 	return {
 		init : init
 		, sendMsg : sendMsg
@@ -146,5 +155,6 @@ indian.che.socket =(function() {
 		, sendGameBetGold : sendGameBetGold
 		, sendGameStand : sendGameStand
 		, sendGameGiveUp : sendGameGiveUp
+		, sendExitRoom : sendExitRoom
 	}
 }());

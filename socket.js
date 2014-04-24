@@ -1,7 +1,8 @@
 var Master = require('./master');
 
 module.exports = function(app) {
-	var io = require('socket.io').listen(app);
+	var io = require('socket.io').listen(app)
+		, allClients = [];
 
 	io.configure(function() {
 		io.set('log level', 2);
@@ -18,9 +19,12 @@ module.exports = function(app) {
 				.on('connection', socketInit);
 
 	function socketInit(socket) {
-		var sJoinedRoom = null;
+		allClients.push(socket);
+		//////////////////////////////////////////////!!!!!!!!!!!
+
 		socket.on('join', processJoin.bind(this, socket));
 		socket.on('msg', processMsg.bind(this, socket));
+		socket.on('disconnect', processDisconnect.bind(this, socket));
 
 		socket.on('game_ready', processGameReady.bind(this, socket));
 		socket.on('game_start', processGameInit.bind(this, socket));
@@ -42,7 +46,7 @@ module.exports = function(app) {
 			return;
 		}
 
-		Master.joinRoom(sJoinedRoomId, htUser);
+		Master.joinRoom(htRoom, htUser);
 		
 		socket.join(sJoinedRoomId);
 		socket.emit('joined', {
@@ -202,5 +206,9 @@ module.exports = function(app) {
 			, htWinner : htWinner
 			, aCardInHands : aCardInHands
 		});
+	}
+
+	function processDisconnect(socket) {
+		
 	}
 }

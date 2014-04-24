@@ -17,7 +17,8 @@ input[type=image],input[type=text],input[type=submit],input[type=password],texta
 body{background-color: #131313;}
 .eater_font{font-family: 'Eater', cursive;}
 .header{height:68px;background-color: #0099cc;line-height:68px;color:#ffffff;font-size: 24px;}
-.logo{margin-left: 20px;}
+.logo{margin-left: 20px;float: left;}
+.exit_btn{width:100px;height:40px;background-color:grey;float:right;color:black;}
 
 /* game */
 .game{width:1000px;margin: 22px auto;}

@@ -93,6 +93,10 @@ indian.che.ui = (function() {
 		} else if (welTarget.hasClass('_result_ok')) {
 			initNewGame(welTarget);
 			we.preventDefault();
+
+		} else if (welTarget.hasClass('_exit_btn')) {
+			exitRoom(welTarget);
+			we.preventDefault();
 		}
 	}
 
@@ -563,7 +567,16 @@ indian.che.ui = (function() {
 		htElement['opponent_card_wrap'].empty();
 		htElement['share_card_wrap'].empty();
 	}
-	
+
+	function exitRoom(welTarget) {
+		socket.sendExitRoom(getData('username'));
+		location.href = '/waitingRoom';
+	}
+
+	function processExitedRoom(htData) {
+		showMsg(htData.sUserName + '님이 나가셨습니다.'); // TODO : 색상 추가
+		// 상대방 정보 초기하는 코드
+	}
 
 	return {
 		initialize : initialize
@@ -584,6 +597,7 @@ indian.che.ui = (function() {
 		, processGameOpponentStandOk : processGameOpponentStandOk
 		, processGameGiveUpOk : processGameGiveUpOk
 		, processGameOpponentGiveUpOk : processGameOpponentGiveUpOk
-		, processGameEnd : processGameEnd		
+		, processGameEnd : processGameEnd
+		, processExitedRoom : processExitedRoom
 	}
 })();
